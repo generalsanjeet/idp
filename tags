@@ -64,16 +64,37 @@
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
 Connect	internal/db/db.go	/^func Connect(dsn string) (*sql.DB, error) {$/;"	f	package:db	typeref:typename:(*sql.DB, error)
+Create	internal/service/handler.go	/^func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+Create	internal/service/store.go	/^func (s *Store) Create(req CreateRequest) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
+CreateRequest	internal/service/model.go	/^type CreateRequest struct {$/;"	s	package:service
+CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"`$/;"	m	struct:service.Service	typeref:typename:time.Time
 Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http.Request) {$/;"	f	package:health
+Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:service
+ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB) error {$/;"	f	package:db	typeref:typename:error
+Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
+Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+NewHandler	internal/service/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:service	typeref:typename:*Handler
+NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
+Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
+Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
+RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
 Status	internal/health/handler.go	/^	Status string `json:"status"`$/;"	m	struct:health.response	typeref:typename:string
+Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
 build	Makefile	/^build:$/;"	t
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
+db	internal/service/store.go	/^    db *sql.DB$/;"	m	struct:service.Store	typeref:typename:*sql.DB
 health	internal/health/handler.go	/^package health$/;"	p
 idp	README.md	/^# idp$/;"	c
 main	cmd/server/main.go	/^func main() {$/;"	f	package:main
 main	cmd/server/main.go	/^package main$/;"	p
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 run	Makefile	/^run:$/;"	t
+service	internal/service/handler.go	/^package service$/;"	p
+service	internal/service/model.go	/^package service$/;"	p
+service	internal/service/store.go	/^package service$/;"	p
+store	internal/service/handler.go	/^	store *Store$/;"	m	struct:service.Handler	typeref:typename:*Store
 test	Makefile	/^test:$/;"	t
