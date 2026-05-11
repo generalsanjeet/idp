@@ -31,3 +31,28 @@ func (s *Store) Create(req CreateRequest) (Service, error) {
 
     return svc, nil
 }
+
+// List returns all registered services ordered by newest first.
+func (s *Store) List() ([]Service, error) {
+    query := `
+        SELECT id, name, repo_url, owner, created_at
+        FROM services
+        ORDER BY created_at DESC`
+
+    rows, err := s.db.Query(query)
+    if err != nil {
+        return nil, fmt.Errorf("could not list services: %w", err)
+    }
+    defer rows.Close()
+
+    var services []Service
+    for rows.Next() {
+        var svc Service
+        if err := rows.Scan(&svc.ID, &svc.Name, &svc.RepoURL, &svc.Owner, &svc.CreatedAt); err != nil {
+            return nil, fmt.Errorf("could not scan service: %w", err)
+        }
+        services = append(services, svc)
+    }
+
+    return services, nil
+}

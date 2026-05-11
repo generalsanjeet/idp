@@ -39,7 +39,7 @@ func main() {
 
 	// Register routes here. Each route maps a URL path to a handler function.
 	mux.HandleFunc("/health", health.Handler)
-	mux.HandleFunc("/services", serviceHandler.Create)
+	mux.HandleFunc("/services", serviceHandler.Route)
 
 	addr := ":8080"
 	fmt.Printf("IDP server starting on %s\n", addr)

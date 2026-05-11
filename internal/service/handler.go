@@ -16,14 +16,20 @@ func NewHandler(store *Store) *Handler {
 	return &Handler{store: store}
 }
 
+// Route dispatches /services to the correct handler based on HTTP method.
+func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {
+    switch r.Method {
+    case http.MethodPost:
+        h.Create(w, r)
+    case http.MethodGet:
+        h.List(w, r)
+    default:
+        http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+    }
+}
+
 // Create handles POST /services.
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
-	// Only allow POST.
-	if r.Method != http.MethodPost {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	// Decode the request body into CreateRequest.
 	var req CreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -49,4 +55,22 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated) // 201, not 200
 	json.NewEncoder(w).Encode(svc)
+}
+
+// List handles GET /services.
+func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
+    services, err := h.store.List()
+    if err != nil {
+        http.Error(w, "could not fetch services", http.StatusInternalServerError)
+        return
+    }
+
+    // If no services exist yet, return an empty array — not null.
+    if services == nil {
+        services = []Service{}
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(services)
 }

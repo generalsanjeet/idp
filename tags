@@ -71,6 +71,8 @@ CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"
 Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http.Request) {$/;"	f	package:health
 Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:service
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
+List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"	f	struct:service.Store	typeref:typename:([]Service, error)
 Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB) error {$/;"	f	package:db	typeref:typename:error
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
@@ -80,6 +82,7 @@ Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	s
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+Route	internal/service/handler.go	/^func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
 Status	internal/health/handler.go	/^	Status string `json:"status"`$/;"	m	struct:health.response	typeref:typename:string
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
