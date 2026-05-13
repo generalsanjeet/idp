@@ -68,36 +68,55 @@ Create	internal/service/handler.go	/^func (h *Handler) Create(w http.ResponseWri
 Create	internal/service/store.go	/^func (s *Store) Create(req CreateRequest) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
 CreateRequest	internal/service/model.go	/^type CreateRequest struct {$/;"	s	package:service
 CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"`$/;"	m	struct:service.Service	typeref:typename:time.Time
+Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
+Deploy	internal/deploy/k8s.go	/^func (s *Store) Deploy(ctx context.Context, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
+Handler	internal/deploy/handler.go	/^type Handler struct {$/;"	s	package:deploy
 Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http.Request) {$/;"	f	package:health
 Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:service
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
+Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
+Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"	f	struct:service.Store	typeref:typename:([]Service, error)
 Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB) error {$/;"	f	package:db	typeref:typename:error
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
 NewHandler	internal/service/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:service	typeref:typename:*Handler
+NewStore	internal/deploy/k8s.go	/^func NewStore(kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
 Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 Route	internal/service/handler.go	/^func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
+Status	internal/deploy/handler.go	/^	Status  string `json:"status"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Status	internal/health/handler.go	/^	Status string `json:"status"`$/;"	m	struct:health.response	typeref:typename:string
+Store	internal/deploy/k8s.go	/^type Store struct {$/;"	s	package:deploy
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
+appsv1	internal/deploy/k8s.go	/^	appsv1 "k8s.io\/api\/apps\/v1"$/;"	P	package:k8s.io/api/apps/v1
 build	Makefile	/^build:$/;"	t
+client	internal/deploy/k8s.go	/^	client kubernetes.Interface$/;"	m	struct:deploy.Store	typeref:typename:kubernetes.Interface
+corev1	internal/deploy/k8s.go	/^	corev1 "k8s.io\/api\/core\/v1"$/;"	P	package:k8s.io/api/core/v1
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
 db	internal/service/store.go	/^    db *sql.DB$/;"	m	struct:service.Store	typeref:typename:*sql.DB
+deploy	internal/deploy/handler.go	/^package deploy$/;"	p
+deploy	internal/deploy/k8s.go	/^package deploy$/;"	p
+deployRequest	internal/deploy/handler.go	/^type deployRequest struct {$/;"	s	package:deploy
+deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	package:deploy
 health	internal/health/handler.go	/^package health$/;"	p
 idp	README.md	/^# idp$/;"	c
 main	cmd/server/main.go	/^func main() {$/;"	f	package:main
 main	cmd/server/main.go	/^package main$/;"	p
+metav1	internal/deploy/k8s.go	/^	metav1 "k8s.io\/apimachinery\/pkg\/apis\/meta\/v1"$/;"	P	package:k8s.io/apimachinery/pkg/apis/meta/v1
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 run	Makefile	/^run:$/;"	t
 service	internal/service/handler.go	/^package service$/;"	p
 service	internal/service/model.go	/^package service$/;"	p
 service	internal/service/store.go	/^package service$/;"	p
+store	internal/deploy/handler.go	/^	store *Store$/;"	m	struct:deploy.Handler	typeref:typename:*Store
 store	internal/service/handler.go	/^	store *Store$/;"	m	struct:service.Handler	typeref:typename:*Store
 test	Makefile	/^test:$/;"	t

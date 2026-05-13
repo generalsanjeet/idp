@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/generalsanjeet/idp/internal/health"
+	"github.com/generalsanjeet/idp/internal/deploy"
 	"github.com/generalsanjeet/idp/internal/db"
 	"github.com/generalsanjeet/idp/internal/service"
 )
@@ -31,15 +32,29 @@ func main() {
 	}
 	fmt.Println("migrations complete")
 
+	// Read kubeconfig path from env, default to standard location.
+	kubeconfig := os.Getenv("KUBECONFIG")
+	if kubeconfig == "" {
+		kubeconfig = os.Getenv("HOME") + "/.kube/config"
+	}
+
+	deployStore, err := deploy.NewStore(kubeconfig)
+	if err != nil {
+		log.Fatalf("could not create k8s client: %v", err)
+	}
+	fmt.Println("connected to kubernetes")
+
 	// Wire up service feature.
     serviceStore := service.NewStore(database)
     serviceHandler := service.NewHandler(serviceStore)
+	deployHandler := deploy.NewHandler(deployStore)
 
 	mux := http.NewServeMux()
 
 	// Register routes here. Each route maps a URL path to a handler function.
 	mux.HandleFunc("/health", health.Handler)
 	mux.HandleFunc("/services", serviceHandler.Route)
+	mux.HandleFunc("/deploy/", deployHandler.Deploy) // trailing slash catches /deploy/{anything}
 
 	addr := ":8080"
 	fmt.Printf("IDP server starting on %s\n", addr)
