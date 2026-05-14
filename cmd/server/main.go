@@ -9,6 +9,7 @@ import (
 	"github.com/generalsanjeet/idp/internal/health"
 	"github.com/generalsanjeet/idp/internal/deploy"
 	"github.com/generalsanjeet/idp/internal/db"
+	idplogs "github.com/generalsanjeet/idp/internal/logs"
 	"github.com/generalsanjeet/idp/internal/service"
 )
 
@@ -44,10 +45,18 @@ func main() {
 	}
 	fmt.Println("connected to kubernetes")
 
+	// Read Loki URL from env, default to local port-forward address.
+	lokiURL := os.Getenv("LOKI_URL")
+	if lokiURL == "" {
+		lokiURL = "http://localhost:3100"
+	}
+
 	// Wire up service feature.
     serviceStore := service.NewStore(database)
     serviceHandler := service.NewHandler(serviceStore)
 	deployHandler := deploy.NewHandler(deployStore)
+	logsStore := idplogs.NewStore(lokiURL)
+	logsHandler := idplogs.NewHandler(logsStore)
 
 	mux := http.NewServeMux()
 
@@ -55,6 +64,7 @@ func main() {
 	mux.HandleFunc("/health", health.Handler)
 	mux.HandleFunc("/services", serviceHandler.Route)
 	mux.HandleFunc("/deploy/", deployHandler.Deploy) // trailing slash catches /deploy/{anything}
+	mux.HandleFunc("/logs/", logsHandler.GetLogs)
 
 	addr := ":8080"
 	fmt.Printf("IDP server starting on %s\n", addr)
