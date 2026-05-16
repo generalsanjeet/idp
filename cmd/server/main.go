@@ -10,6 +10,7 @@ import (
 	"github.com/generalsanjeet/idp/internal/deploy"
 	"github.com/generalsanjeet/idp/internal/db"
 	idplogs "github.com/generalsanjeet/idp/internal/logs"
+	"github.com/generalsanjeet/idp/internal/metrics"
 	"github.com/generalsanjeet/idp/internal/service"
 )
 
@@ -51,12 +52,19 @@ func main() {
 		lokiURL = "http://localhost:3100"
 	}
 
+	prometheusURL := os.Getenv("PROMETHEUS_URL")
+	if prometheusURL == "" {
+		prometheusURL = "http://localhost:9091"
+	}
+
 	// Wire up service feature.
     serviceStore := service.NewStore(database)
     serviceHandler := service.NewHandler(serviceStore)
 	deployHandler := deploy.NewHandler(deployStore)
 	logsStore := idplogs.NewStore(lokiURL)
 	logsHandler := idplogs.NewHandler(logsStore)
+	metricsStore := metrics.NewStore(prometheusURL)
+	metricsHandler := metrics.NewHandler(metricsStore)
 
 	mux := http.NewServeMux()
 
@@ -65,6 +73,7 @@ func main() {
 	mux.HandleFunc("/services", serviceHandler.Route)
 	mux.HandleFunc("/deploy/", deployHandler.Deploy) // trailing slash catches /deploy/{anything}
 	mux.HandleFunc("/logs/", logsHandler.GetLogs)
+	mux.HandleFunc("/metrics/", metricsHandler.GetMetrics)
 
 	addr := ":8080"
 	fmt.Printf("IDP server starting on %s\n", addr)

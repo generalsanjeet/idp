@@ -69,13 +69,17 @@ Create	internal/service/store.go	/^func (s *Store) Create(req CreateRequest) (Se
 CreateRequest	internal/service/model.go	/^type CreateRequest struct {$/;"	s	package:service
 CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"`$/;"	m	struct:service.Service	typeref:typename:time.Time
 Data	internal/logs/loki.go	/^	Data   struct {$/;"	m	struct:logs.lokiResponse	typeref:typename:struct { Result []struct { Values [][]string `json:"values"`; } `json:"result"`; }
+Data	internal/metrics/prometheus.go	/^	Data   struct {$/;"	m	struct:metrics.prometheusResponse	typeref:typename:struct { Result []struct { Metric map[string]string `json:"metric"`; Value []interface{} `json:"value"`; } `json:"result"`; }
 Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
 Deploy	internal/deploy/k8s.go	/^func (s *Store) Deploy(ctx context.Context, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 GetLogs	internal/logs/handler.go	/^func (h *Handler) GetLogs(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:logs.Handler
 GetLogs	internal/logs/loki.go	/^func (s *Store) GetLogs(serviceName string, limit int) ([]LogLine, error) {$/;"	f	struct:logs.Store	typeref:typename:([]LogLine, error)
+GetMetrics	internal/metrics/handler.go	/^func (h *Handler) GetMetrics(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:metrics.Handler
+GetMetrics	internal/metrics/prometheus.go	/^func (s *Store) GetMetrics(serviceName string) (ServiceMetrics, error) {$/;"	f	struct:metrics.Store	typeref:typename:(ServiceMetrics, error)
 Handler	internal/deploy/handler.go	/^type Handler struct {$/;"	s	package:deploy
 Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http.Request) {$/;"	f	package:health
 Handler	internal/logs/handler.go	/^type Handler struct {$/;"	s	package:logs
+Handler	internal/metrics/handler.go	/^type Handler struct {$/;"	s	package:metrics
 Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:service
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
@@ -89,22 +93,30 @@ Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	str
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
 NewHandler	internal/logs/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:logs	typeref:typename:*Handler
+NewHandler	internal/metrics/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:metrics	typeref:typename:*Handler
 NewHandler	internal/service/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:service	typeref:typename:*Handler
 NewStore	internal/deploy/k8s.go	/^func NewStore(kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
 NewStore	internal/logs/loki.go	/^func NewStore(lokiURL string) *Store {$/;"	f	package:logs	typeref:typename:*Store
+NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *Store {$/;"	f	package:metrics	typeref:typename:*Store
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
 Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+ReadyReplicas	internal/metrics/prometheus.go	/^	ReadyReplicas string `json:"ready_replicas"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 Route	internal/service/handler.go	/^func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
+Service	internal/metrics/prometheus.go	/^	Service       string `json:"service"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
+ServiceMetrics	internal/metrics/prometheus.go	/^type ServiceMetrics struct {$/;"	s	package:metrics
 Status	internal/deploy/handler.go	/^	Status  string `json:"status"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Status	internal/health/handler.go	/^	Status string `json:"status"`$/;"	m	struct:health.response	typeref:typename:string
 Status	internal/logs/loki.go	/^	Status string `json:"status"`$/;"	m	struct:logs.lokiResponse	typeref:typename:string
+Status	internal/metrics/prometheus.go	/^	Status        string `json:"status"` \/\/ "healthy" or "degraded"$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
+Status	internal/metrics/prometheus.go	/^	Status string `json:"status"`$/;"	m	struct:metrics.prometheusResponse	typeref:typename:string
 Store	internal/deploy/k8s.go	/^type Store struct {$/;"	s	package:deploy
 Store	internal/logs/loki.go	/^type Store struct {$/;"	s	package:logs
+Store	internal/metrics/prometheus.go	/^type Store struct {$/;"	s	package:metrics
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
 Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 appsv1	internal/deploy/k8s.go	/^	appsv1 "k8s.io\/api\/apps\/v1"$/;"	P	package:k8s.io/api/apps/v1
@@ -128,6 +140,10 @@ lokiURL	internal/logs/loki.go	/^	lokiURL string \/\/ e.g. http:\/\/localhost:310
 main	cmd/server/main.go	/^func main() {$/;"	f	package:main
 main	cmd/server/main.go	/^package main$/;"	p
 metav1	internal/deploy/k8s.go	/^	metav1 "k8s.io\/apimachinery\/pkg\/apis\/meta\/v1"$/;"	P	package:k8s.io/apimachinery/pkg/apis/meta/v1
+metrics	internal/metrics/handler.go	/^package metrics$/;"	p
+metrics	internal/metrics/prometheus.go	/^package metrics$/;"	p
+prometheusResponse	internal/metrics/prometheus.go	/^type prometheusResponse struct {$/;"	s	package:metrics
+prometheusURL	internal/metrics/prometheus.go	/^	prometheusURL string \/\/ e.g. http:\/\/localhost:9091$/;"	m	struct:metrics.Store	typeref:typename:string
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 run	Makefile	/^run:$/;"	t
 service	internal/service/handler.go	/^package service$/;"	p
@@ -135,5 +151,6 @@ service	internal/service/model.go	/^package service$/;"	p
 service	internal/service/store.go	/^package service$/;"	p
 store	internal/deploy/handler.go	/^	store *Store$/;"	m	struct:deploy.Handler	typeref:typename:*Store
 store	internal/logs/handler.go	/^	store *Store$/;"	m	struct:logs.Handler	typeref:typename:*Store
+store	internal/metrics/handler.go	/^	store *Store$/;"	m	struct:metrics.Handler	typeref:typename:*Store
 store	internal/service/handler.go	/^	store *Store$/;"	m	struct:service.Handler	typeref:typename:*Store
 test	Makefile	/^test:$/;"	t
