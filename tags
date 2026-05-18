@@ -63,6 +63,7 @@
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Connect	internal/db/db.go	/^func Connect(dsn string) (*sql.DB, error) {$/;"	f	package:db	typeref:typename:(*sql.DB, error)
 Create	internal/service/handler.go	/^func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 Create	internal/service/store.go	/^func (s *Store) Create(req CreateRequest) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
@@ -70,6 +71,7 @@ CreateRequest	internal/service/model.go	/^type CreateRequest struct {$/;"	s	pack
 CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"`$/;"	m	struct:service.Service	typeref:typename:time.Time
 Data	internal/logs/loki.go	/^	Data   struct {$/;"	m	struct:logs.lokiResponse	typeref:typename:struct { Result []struct { Values [][]string `json:"values"`; } `json:"result"`; }
 Data	internal/metrics/prometheus.go	/^	Data   struct {$/;"	m	struct:metrics.prometheusResponse	typeref:typename:struct { Result []struct { Metric map[string]string `json:"metric"`; Value []interface{} `json:"value"`; } `json:"result"`; }
+DatabaseURL	internal/config/config.go	/^	DatabaseURL string$/;"	m	struct:config.Config	typeref:typename:string
 Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
 Deploy	internal/deploy/k8s.go	/^func (s *Store) Deploy(ctx context.Context, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 GetLogs	internal/logs/handler.go	/^func (h *Handler) GetLogs(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:logs.Handler
@@ -84,10 +86,13 @@ Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:servic
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
+KubeconfigPath	internal/config/config.go	/^	KubeconfigPath string$/;"	m	struct:config.Config	typeref:typename:string
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"	f	struct:service.Store	typeref:typename:([]Service, error)
+Load	internal/config/config.go	/^func Load() (Config, error) {$/;"	f	package:config	typeref:typename:(Config, error)
 LogLine	internal/logs/loki.go	/^type LogLine struct {$/;"	s	package:logs
+LokiURL	internal/config/config.go	/^	LokiURL string$/;"	m	struct:config.Config	typeref:typename:string
 Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB) error {$/;"	f	package:db	typeref:typename:error
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
@@ -101,10 +106,12 @@ NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *S
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
 Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+PrometheusURL	internal/config/config.go	/^	PrometheusURL string$/;"	m	struct:config.Config	typeref:typename:string
 ReadyReplicas	internal/metrics/prometheus.go	/^	ReadyReplicas string `json:"ready_replicas"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 Route	internal/service/handler.go	/^func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+ServerAddr	internal/config/config.go	/^	ServerAddr string$/;"	m	struct:config.Config	typeref:typename:string
 Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Service	internal/metrics/prometheus.go	/^	Service       string `json:"service"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
@@ -122,6 +129,7 @@ Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	str
 appsv1	internal/deploy/k8s.go	/^	appsv1 "k8s.io\/api\/apps\/v1"$/;"	P	package:k8s.io/api/apps/v1
 build	Makefile	/^build:$/;"	t
 client	internal/deploy/k8s.go	/^	client kubernetes.Interface$/;"	m	struct:deploy.Store	typeref:typename:kubernetes.Interface
+config	internal/config/config.go	/^package config$/;"	p
 corev1	internal/deploy/k8s.go	/^	corev1 "k8s.io\/api\/core\/v1"$/;"	P	package:k8s.io/api/core/v1
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
