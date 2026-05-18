@@ -3,6 +3,7 @@ module github.com/generalsanjeet/idp
 go 1.26.2
 
 require (
+	github.com/go-chi/chi/v5 v5.2.5
 	github.com/lib/pq v1.12.3
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0

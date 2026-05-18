@@ -4,7 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strings"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // Handler holds dependencies for deploy HTTP handlers.
@@ -31,14 +32,8 @@ type deployResponse struct {
 
 // Deploy handles POST /deploy/{service}.
 func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Extract service name from URL path.
-	// r.URL.Path = "/deploy/payments" → serviceName = "payments"
-	serviceName := strings.TrimPrefix(r.URL.Path, "/deploy/")
+	// chi extracts {service} from the URL cleanly.
+	serviceName := chi.URLParam(r, "service")
 	if serviceName == "" {
 		http.Error(w, "service name is required", http.StatusBadRequest)
 		return

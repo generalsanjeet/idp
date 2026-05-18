@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-//	"os"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+
 	"github.com/generalsanjeet/idp/internal/config"
 	"github.com/generalsanjeet/idp/internal/health"
 	"github.com/generalsanjeet/idp/internal/deploy"
@@ -21,7 +24,6 @@ func main() {
 		log.Fatalf("invalid config: %v", err)
 	}
 	fmt.Println("config loaded")
-
 	// Connect to Postgres. If this fails, we stop immediately.
 	database, err := db.Connect(cfg.DatabaseURL)
 	if err != nil {
@@ -52,19 +54,22 @@ func main() {
 	metricsStore := metrics.NewStore(cfg.PrometheusURL)
 	metricsHandler := metrics.NewHandler(metricsStore)
 
-	mux := http.NewServeMux()
+	r := chi.NewRouter()
 
-	// Register routes here. Each route maps a URL path to a handler function.
-	mux.HandleFunc("/health", health.Handler)
-	mux.HandleFunc("/services", serviceHandler.Route)
-	mux.HandleFunc("/deploy/", deployHandler.Deploy) // trailing slash catches /deploy/{anything}
-	mux.HandleFunc("/logs/", logsHandler.GetLogs)
-	mux.HandleFunc("/metrics/", metricsHandler.GetMetrics)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	r.Get("/health", health.Handler)
+	r.Post("/services", serviceHandler.Create)
+	r.Get("/services", serviceHandler.List)
+	r.Post("/deploy/{service}", deployHandler.Deploy)
+	r.Get("/logs/{service}", logsHandler.GetLogs)
+	r.Get("/metrics/{service}", metricsHandler.GetMetrics)
 
 	//addr := ":8080"
 	fmt.Printf("IDP server starting on %s\n", cfg.ServerAddr)
 
-	if err := http.ListenAndServe(cfg.ServerAddr, mux); err != nil {
+	if err := http.ListenAndServe(cfg.ServerAddr, r); err != nil {
 		log.Fatalf("server failed to start: %v", err)
 	}
 }

@@ -3,7 +3,8 @@ package logs
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // Handler holds dependencies for log HTTP handlers.
@@ -18,13 +19,7 @@ func NewHandler(store *Store) *Handler {
 
 // GetLogs handles GET /logs/{service}.
 func (h *Handler) GetLogs(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Extract service name from URL — same pattern as deploy handler.
-	serviceName := strings.TrimPrefix(r.URL.Path, "/logs/")
+	serviceName := chi.URLParam(r, "service")
 	if serviceName == "" {
 		http.Error(w, "service name is required", http.StatusBadRequest)
 		return

@@ -110,7 +110,6 @@ PrometheusURL	internal/config/config.go	/^	PrometheusURL string$/;"	m	struct:con
 ReadyReplicas	internal/metrics/prometheus.go	/^	ReadyReplicas string `json:"ready_replicas"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
-Route	internal/service/handler.go	/^func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 ServerAddr	internal/config/config.go	/^	ServerAddr string$/;"	m	struct:config.Config	typeref:typename:string
 Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Service	internal/metrics/prometheus.go	/^	Service       string `json:"service"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string

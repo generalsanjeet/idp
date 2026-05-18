@@ -3,7 +3,8 @@ package metrics
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // Handler holds dependencies for metrics HTTP handlers.
@@ -18,12 +19,7 @@ func NewHandler(store *Store) *Handler {
 
 // GetMetrics handles GET /metrics/{service}.
 func (h *Handler) GetMetrics(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	serviceName := strings.TrimPrefix(r.URL.Path, "/metrics/")
+	serviceName := chi.URLParam(r, "service")
 	if serviceName == "" {
 		http.Error(w, "service name is required", http.StatusBadRequest)
 		return

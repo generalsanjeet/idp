@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"net/http"
-	"log"
 )
 
 // Handler holds dependencies for service HTTP handlers.
@@ -14,18 +13,6 @@ type Handler struct {
 // NewHandler creates a new Handler.
 func NewHandler(store *Store) *Handler {
 	return &Handler{store: store}
-}
-
-// Route dispatches /services to the correct handler based on HTTP method.
-func (h *Handler) Route(w http.ResponseWriter, r *http.Request) {
-    switch r.Method {
-    case http.MethodPost:
-        h.Create(w, r)
-    case http.MethodGet:
-        h.List(w, r)
-    default:
-        http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-    }
 }
 
 // Create handles POST /services.
@@ -47,7 +34,6 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	svc, err := h.store.Create(req)
 	if err != nil {
 		http.Error(w, "could not create service", http.StatusInternalServerError)
-		log.Println(err)
 		return
 	}
 
