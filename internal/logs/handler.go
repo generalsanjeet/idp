@@ -3,6 +3,7 @@ package logs
 import (
 	"encoding/json"
 	"net/http"
+	"log/slog"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -27,6 +28,7 @@ func (h *Handler) GetLogs(w http.ResponseWriter, r *http.Request) {
 
 	lines, err := h.store.GetLogs(serviceName, 100)
 	if err != nil {
+		slog.Error("failed to fetch logs", "error", err, "service", serviceName)
 		http.Error(w, "could not fetch logs", http.StatusInternalServerError)
 		return
 	}

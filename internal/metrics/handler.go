@@ -3,6 +3,7 @@ package metrics
 import (
 	"encoding/json"
 	"net/http"
+	"log/slog"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -27,6 +28,7 @@ func (h *Handler) GetMetrics(w http.ResponseWriter, r *http.Request) {
 
 	result, err := h.store.GetMetrics(serviceName)
 	if err != nil {
+		slog.Error("failed to fetch metrics", "error", err, "service", serviceName)
 		http.Error(w, "could not fetch metrics", http.StatusInternalServerError)
 		return
 	}

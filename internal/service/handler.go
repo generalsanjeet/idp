@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 )
 
@@ -20,6 +21,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	// Decode the request body into CreateRequest.
 	var req CreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		slog.Error("failed to decode request", "error", err, "handler", "service.Create")
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
@@ -33,11 +35,13 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	// Delegate to store — handler does not know about SQL.
 	svc, err := h.store.Create(req)
 	if err != nil {
+		slog.Error("failed to create service", "error", err, "service", req.Name)
 		http.Error(w, "could not create service", http.StatusInternalServerError)
 		return
 	}
 
 	// Respond with the created service.
+	slog.Info("service created", "service", svc.Name, "owner", svc.Owner)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated) // 201, not 200
 	json.NewEncoder(w).Encode(svc)
@@ -47,6 +51,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
     services, err := h.store.List()
     if err != nil {
+		slog.Error("failed to list services", "error", err)
         http.Error(w, "could not fetch services", http.StatusInternalServerError)
         return
     }

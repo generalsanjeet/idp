@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -18,32 +18,39 @@ import (
 )
 
 func main() {
-	// Load all config first. If anything is wrong, stop immediately.
+	// Set up JSON logger writing to stdout.
+	// Every log line will be a JSON object — machine readable.
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+	// Set as the default logger so slog.Info() etc work globally.
+	slog.SetDefault(logger)
+
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("invalid config: %v", err)
+		slog.Error("invalid config", "error", err)
+		os.Exit(1)
 	}
-	fmt.Println("config loaded")
-	// Connect to Postgres. If this fails, we stop immediately.
+	slog.Info("config loaded")
+
 	database, err := db.Connect(cfg.DatabaseURL)
 	if err != nil {
-		log.Fatalf("could not connect to database: %v", err)
+		slog.Error("could not connect to database", "error", err)
+		os.Exit(1)
 	}
-	fmt.Println("connected to database")
+	slog.Info("connected to database")
 
-	// Run migrations before starting the server.
 	if err := db.Migrate(database); err != nil {
-		log.Fatalf("could not run migrations: %v", err)
+		slog.Error("could not run migrations", "error", err)
+		os.Exit(1)
 	}
-	fmt.Println("migrations complete")
+	slog.Info("migrations complete")
 
 	deployStore, err := deploy.NewStore(cfg.KubeconfigPath)
 	if err != nil {
-		log.Fatalf("could not create k8s client: %v", err)
+		slog.Error("could not create k8s client", "error", err)
+		os.Exit(1)
 	}
-	fmt.Println("connected to kubernetes")
-
-
+	slog.Info("connected to kubernetes")
 
 	// Wire up service feature.
     serviceStore := service.NewStore(database)
@@ -66,10 +73,9 @@ func main() {
 	r.Get("/logs/{service}", logsHandler.GetLogs)
 	r.Get("/metrics/{service}", metricsHandler.GetMetrics)
 
-	//addr := ":8080"
-	fmt.Printf("IDP server starting on %s\n", cfg.ServerAddr)
-
+	slog.Info("IDP server starting", "addr", cfg.ServerAddr)
 	if err := http.ListenAndServe(cfg.ServerAddr, r); err != nil {
-		log.Fatalf("server failed to start: %v", err)
+		slog.Error("server failed to start", "error", err)
+		os.Exit(1)
 	}
 }

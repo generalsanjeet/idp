@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"log/slog"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -41,6 +42,7 @@ func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {
 
 	var req deployRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		slog.Error("failed to decode request", "error", err, "handler", "deploy.Deploy")
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
@@ -51,10 +53,12 @@ func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.store.Deploy(context.Background(), serviceName, req.Image); err != nil {
+		slog.Error("failed to deploy service", "error", err, "service", serviceName, "image", req.Image)
 		http.Error(w, "could not deploy service", http.StatusInternalServerError)
 		return
 	}
 
+	slog.Info("service deployed", "service", serviceName, "image", req.Image)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(deployResponse{
