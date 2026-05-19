@@ -2,7 +2,17 @@ package service
 
 import (
     "database/sql"
+	"errors"
     "fmt"
+
+	"github.com/lib/pq"
+)
+
+// Sentinel errors — the handler checks against these.
+// Using errors.Is() to compare, never string matching.
+var (
+	ErrDuplicate = errors.New("service already exists")
+	ErrNotFound  = errors.New("service not found")
 )
 
 // Store handles all database operations for services.
@@ -26,6 +36,13 @@ func (s *Store) Create(req CreateRequest) (Service, error) {
     err := s.db.QueryRow(query, req.Name, req.RepoURL, req.Owner).
         Scan(&svc.ID, &svc.Name, &svc.RepoURL, &svc.Owner, &svc.CreatedAt)
     if err != nil {
+		// Check if Postgres returned a unique constraint violation.
+		// pq.Error is the Postgres-specific error type from lib/pq.
+		// Code "23505" is the Postgres error code for unique_violation.
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+			return Service{}, ErrDuplicate
+		}
         return Service{}, fmt.Errorf("could not create service: %w", err)
     }
 
@@ -56,3 +73,26 @@ func (s *Store) List() ([]Service, error) {
 
     return services, nil
 }
+
+// GetByName fetches a single service by name.
+// Returns ErrNotFound if no service with that name exists.
+func (s *Store) GetByName(name string) (Service, error) {
+	query := `
+		SELECT id, name, repo_url, owner, created_at
+		FROM services
+		WHERE name = $1`
+
+	var svc Service
+	err := s.db.QueryRow(query, name).
+		Scan(&svc.ID, &svc.Name, &svc.RepoURL, &svc.Owner, &svc.CreatedAt)
+	if err != nil {
+		// sql.ErrNoRows is what Go returns when QueryRow finds nothing.
+		if errors.Is(err, sql.ErrNoRows) {
+			return Service{}, ErrNotFound
+		}
+		return Service{}, fmt.Errorf("could not get service: %w", err)
+	}
+
+	return svc, nil
+}
+

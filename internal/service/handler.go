@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 )
@@ -35,6 +36,11 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	// Delegate to store — handler does not know about SQL.
 	svc, err := h.store.Create(req)
 	if err != nil {
+		// Inspect the error type — don't treat everything as 500.
+		if errors.Is(err, ErrDuplicate) {
+			http.Error(w, "service already exists", http.StatusConflict)
+			return
+		}
 		slog.Error("failed to create service", "error", err, "service", req.Name)
 		http.Error(w, "could not create service", http.StatusInternalServerError)
 		return

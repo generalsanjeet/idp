@@ -74,6 +74,9 @@ Data	internal/metrics/prometheus.go	/^	Data   struct {$/;"	m	struct:metrics.prom
 DatabaseURL	internal/config/config.go	/^	DatabaseURL string$/;"	m	struct:config.Config	typeref:typename:string
 Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
 Deploy	internal/deploy/k8s.go	/^func (s *Store) Deploy(ctx context.Context, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
+ErrDuplicate	internal/service/store.go	/^	ErrDuplicate = errors.New("service already exists")$/;"	v	package:service
+ErrNotFound	internal/service/store.go	/^	ErrNotFound  = errors.New("service not found")$/;"	v	package:service
+GetByName	internal/service/store.go	/^func (s *Store) GetByName(name string) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
 GetLogs	internal/logs/handler.go	/^func (h *Handler) GetLogs(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:logs.Handler
 GetLogs	internal/logs/loki.go	/^func (s *Store) GetLogs(serviceName string, limit int) ([]LogLine, error) {$/;"	f	struct:logs.Store	typeref:typename:([]LogLine, error)
 GetMetrics	internal/metrics/handler.go	/^func (h *Handler) GetMetrics(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:metrics.Handler
