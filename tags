@@ -65,7 +65,9 @@
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Connect	internal/db/db.go	/^func Connect(dsn string) (*sql.DB, error) {$/;"	f	package:db	typeref:typename:(*sql.DB, error)
+Create	internal/service/handler.go	/^	Create(req CreateRequest) (Service, error)$/;"	n	interface:service.Storer	typeref:typename:(Service, error)
 Create	internal/service/handler.go	/^func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+Create	internal/service/handler_test.go	/^func (f *fakeStore) Create(req CreateRequest) (Service, error) {$/;"	f	struct:service.fakeStore	typeref:typename:(Service, error)
 Create	internal/service/store.go	/^func (s *Store) Create(req CreateRequest) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
 CreateRequest	internal/service/model.go	/^type CreateRequest struct {$/;"	s	package:service
 CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"`$/;"	m	struct:service.Service	typeref:typename:time.Time
@@ -91,7 +93,9 @@ Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:d
 Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
 KubeconfigPath	internal/config/config.go	/^	KubeconfigPath string$/;"	m	struct:config.Config	typeref:typename:string
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
+List	internal/service/handler.go	/^	List() ([]Service, error)$/;"	n	interface:service.Storer	typeref:typename:([]Service, error)
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
+List	internal/service/handler_test.go	/^func (f *fakeStore) List() ([]Service, error) {$/;"	f	struct:service.fakeStore	typeref:typename:([]Service, error)
 List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"	f	struct:service.Store	typeref:typename:([]Service, error)
 Load	internal/config/config.go	/^func Load() (Config, error) {$/;"	f	package:config	typeref:typename:(Config, error)
 LogLine	internal/logs/loki.go	/^type LogLine struct {$/;"	s	package:logs
@@ -102,7 +106,7 @@ Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:s
 NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
 NewHandler	internal/logs/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:logs	typeref:typename:*Handler
 NewHandler	internal/metrics/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:metrics	typeref:typename:*Handler
-NewHandler	internal/service/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:service	typeref:typename:*Handler
+NewHandler	internal/service/handler.go	/^func NewHandler(store Storer) *Handler {$/;"	f	package:service	typeref:typename:*Handler
 NewStore	internal/deploy/k8s.go	/^func NewStore(kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
 NewStore	internal/logs/loki.go	/^func NewStore(lokiURL string) *Store {$/;"	f	package:logs	typeref:typename:*Store
 NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *Store {$/;"	f	package:metrics	typeref:typename:*Store
@@ -127,12 +131,22 @@ Store	internal/deploy/k8s.go	/^type Store struct {$/;"	s	package:deploy
 Store	internal/logs/loki.go	/^type Store struct {$/;"	s	package:logs
 Store	internal/metrics/prometheus.go	/^type Store struct {$/;"	s	package:metrics
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
+Storer	internal/service/handler.go	/^type Storer interface {$/;"	i	package:service
+TestHandlerCreate_Duplicate	internal/service/handler_test.go	/^func TestHandlerCreate_Duplicate(t *testing.T) {$/;"	f	package:service
+TestHandlerCreate_MissingFields	internal/service/handler_test.go	/^func TestHandlerCreate_MissingFields(t *testing.T) {$/;"	f	package:service
+TestHandlerCreate_Success	internal/service/handler_test.go	/^func TestHandlerCreate_Success(t *testing.T) {$/;"	f	package:service
+TestHandlerList_Empty	internal/service/handler_test.go	/^func TestHandlerList_Empty(t *testing.T) {$/;"	f	package:service
+TestHandlerList_Success	internal/service/handler_test.go	/^func TestHandlerList_Success(t *testing.T) {$/;"	f	package:service
+TestStoreCreate_Duplicate	internal/service/store_test.go	/^func TestStoreCreate_Duplicate(t *testing.T) {$/;"	f	package:service
+TestStoreCreate_Success	internal/service/store_test.go	/^func TestStoreCreate_Success(t *testing.T) {$/;"	f	package:service
+TestStoreList_Empty	internal/service/store_test.go	/^func TestStoreList_Empty(t *testing.T) {$/;"	f	package:service
 Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 appsv1	internal/deploy/k8s.go	/^	appsv1 "k8s.io\/api\/apps\/v1"$/;"	P	package:k8s.io/api/apps/v1
 build	Makefile	/^build:$/;"	t
 client	internal/deploy/k8s.go	/^	client kubernetes.Interface$/;"	m	struct:deploy.Store	typeref:typename:kubernetes.Interface
 config	internal/config/config.go	/^package config$/;"	p
 corev1	internal/deploy/k8s.go	/^	corev1 "k8s.io\/api\/core\/v1"$/;"	P	package:k8s.io/api/core/v1
+createFn	internal/service/handler_test.go	/^	createFn func(req CreateRequest) (Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func(req CreateRequest) (Service, error)
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
 db	internal/service/store.go	/^    db *sql.DB$/;"	m	struct:service.Store	typeref:typename:*sql.DB
@@ -140,9 +154,11 @@ deploy	internal/deploy/handler.go	/^package deploy$/;"	p
 deploy	internal/deploy/k8s.go	/^package deploy$/;"	p
 deployRequest	internal/deploy/handler.go	/^type deployRequest struct {$/;"	s	package:deploy
 deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	package:deploy
+fakeStore	internal/service/handler_test.go	/^type fakeStore struct {$/;"	s	package:service
 health	internal/health/handler.go	/^package health$/;"	p
 idp	README.md	/^# idp$/;"	c
 idplogs	cmd/server/main.go	/^	idplogs "github.com\/generalsanjeet\/idp\/internal\/logs"$/;"	P	package:github.com/generalsanjeet/idp/internal/logs
+listFn	internal/service/handler_test.go	/^	listFn   func() ([]Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func() ([]Service, error)
 logs	internal/logs/handler.go	/^package logs$/;"	p
 logs	internal/logs/loki.go	/^package logs$/;"	p
 lokiResponse	internal/logs/loki.go	/^type lokiResponse struct {$/;"	s	package:logs
@@ -157,10 +173,12 @@ prometheusURL	internal/metrics/prometheus.go	/^	prometheusURL string \/\/ e.g. h
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 run	Makefile	/^run:$/;"	t
 service	internal/service/handler.go	/^package service$/;"	p
+service	internal/service/handler_test.go	/^package service$/;"	p
 service	internal/service/model.go	/^package service$/;"	p
 service	internal/service/store.go	/^package service$/;"	p
+service	internal/service/store_test.go	/^package service$/;"	p
 store	internal/deploy/handler.go	/^	store *Store$/;"	m	struct:deploy.Handler	typeref:typename:*Store
 store	internal/logs/handler.go	/^	store *Store$/;"	m	struct:logs.Handler	typeref:typename:*Store
 store	internal/metrics/handler.go	/^	store *Store$/;"	m	struct:metrics.Handler	typeref:typename:*Store
-store	internal/service/handler.go	/^	store *Store$/;"	m	struct:service.Handler	typeref:typename:*Store
+store	internal/service/handler.go	/^	store Storer$/;"	m	struct:service.Handler	typeref:typename:Storer
 test	Makefile	/^test:$/;"	t

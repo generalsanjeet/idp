@@ -5,5 +5,4 @@ build:
 	go build -o bin/idp ./cmd/server/...
 
 test:
-	go test ./...
-
+	go test ./... -v

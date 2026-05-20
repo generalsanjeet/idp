@@ -7,13 +7,20 @@ import (
 	"net/http"
 )
 
-// Handler holds dependencies for service HTTP handlers.
-type Handler struct {
-	store *Store
+// Storer is the interface the handler depends on.
+// Any type that implements these two methods can be used —
+// the real Store in production, a fake in tests.
+type Storer interface {
+	Create(req CreateRequest) (Service, error)
+	List() ([]Service, error)
 }
 
-// NewHandler creates a new Handler.
-func NewHandler(store *Store) *Handler {
+// Handler now depends on the interface, not the concrete type.
+type Handler struct {
+	store Storer
+}
+
+func NewHandler(store Storer) *Handler {
 	return &Handler{store: store}
 }
 
