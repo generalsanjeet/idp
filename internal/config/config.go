@@ -28,6 +28,10 @@ type Config struct {
 	// ServerAddr is the address the HTTP server listens on.
 	// Defaults to :8080.
 	ServerAddr string
+
+	// MigrationsPath is the path to the SQL migration files.
+	// Defaults to ./migrations relative to where the binary runs.
+	MigrationsPath string
 }
 
 // Load reads all config from environment variables.
@@ -61,6 +65,11 @@ func Load() (Config, error) {
 	cfg.ServerAddr = os.Getenv("SERVER_ADDR")
 	if cfg.ServerAddr == "" {
 		cfg.ServerAddr = ":8080"
+	}
+
+	cfg.MigrationsPath = os.Getenv("MIGRATIONS_PATH")
+	if cfg.MigrationsPath == "" {
+		cfg.MigrationsPath = "./migrations"
 	}
 
 	return cfg, nil

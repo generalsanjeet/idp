@@ -41,6 +41,29 @@
 !_TAG_KIND_DESCRIPTION!Markdown	s,section	/sections/
 !_TAG_KIND_DESCRIPTION!Markdown	t,subsubsection	/level 3 sections/
 !_TAG_KIND_DESCRIPTION!Markdown	u,l5subsection	/level 5 sections/
+!_TAG_KIND_DESCRIPTION!SQL	C,ccflag	/PLSQL_CCFLAGS/
+!_TAG_KIND_DESCRIPTION!SQL	D,domain	/domains/
+!_TAG_KIND_DESCRIPTION!SQL	E,field	/record fields/
+!_TAG_KIND_DESCRIPTION!SQL	L,label	/block label/
+!_TAG_KIND_DESCRIPTION!SQL	P,package	/packages/
+!_TAG_KIND_DESCRIPTION!SQL	R,service	/services/
+!_TAG_KIND_DESCRIPTION!SQL	S,schema	/schemas/
+!_TAG_KIND_DESCRIPTION!SQL	T,trigger	/triggers/
+!_TAG_KIND_DESCRIPTION!SQL	U,publication	/publications/
+!_TAG_KIND_DESCRIPTION!SQL	V,view	/views/
+!_TAG_KIND_DESCRIPTION!SQL	b,database	/database/
+!_TAG_KIND_DESCRIPTION!SQL	c,cursor	/cursors/
+!_TAG_KIND_DESCRIPTION!SQL	e,event	/events/
+!_TAG_KIND_DESCRIPTION!SQL	f,function	/functions/
+!_TAG_KIND_DESCRIPTION!SQL	i,index	/indexes/
+!_TAG_KIND_DESCRIPTION!SQL	n,synonym	/synonyms/
+!_TAG_KIND_DESCRIPTION!SQL	p,procedure	/procedures/
+!_TAG_KIND_DESCRIPTION!SQL	s,subtype	/subtypes/
+!_TAG_KIND_DESCRIPTION!SQL	t,table	/tables/
+!_TAG_KIND_DESCRIPTION!SQL	v,variable	/variables/
+!_TAG_KIND_DESCRIPTION!SQL	x,mltable	/MobiLink Table Scripts/
+!_TAG_KIND_DESCRIPTION!SQL	y,mlconn	/MobiLink Conn Scripts/
+!_TAG_KIND_DESCRIPTION!SQL	z,mlprop	/MobiLink Properties/
 !_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
@@ -49,6 +72,7 @@
 !_TAG_PARSER_VERSION!Go	0.0	/current.age/
 !_TAG_PARSER_VERSION!Make	1.1	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
+!_TAG_PARSER_VERSION!SQL	0.0	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
 !_TAG_PROC_CWD	/home/sanjeet/idp/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
@@ -100,7 +124,8 @@ List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"
 Load	internal/config/config.go	/^func Load() (Config, error) {$/;"	f	package:config	typeref:typename:(Config, error)
 LogLine	internal/logs/loki.go	/^type LogLine struct {$/;"	s	package:logs
 LokiURL	internal/config/config.go	/^	LokiURL string$/;"	m	struct:config.Config	typeref:typename:string
-Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB) error {$/;"	f	package:db	typeref:typename:error
+Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB, migrationsPath string) error {$/;"	f	package:db	typeref:typename:error
+MigrationsPath	internal/config/config.go	/^	MigrationsPath string$/;"	m	struct:config.Config	typeref:typename:string
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler

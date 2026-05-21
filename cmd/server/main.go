@@ -39,10 +39,11 @@ func main() {
 	}
 	slog.Info("connected to database")
 
-	if err := db.Migrate(database); err != nil {
+	if err := db.Migrate(database, cfg.MigrationsPath); err != nil {
 		slog.Error("could not run migrations", "error", err)
 		os.Exit(1)
 	}
+
 	slog.Info("migrations complete")
 
 	deployStore, err := deploy.NewStore(cfg.KubeconfigPath)

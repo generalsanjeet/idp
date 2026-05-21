@@ -1,26 +1,41 @@
 package db
 
 import (
-    "database/sql"
-    "fmt"
+	"database/sql"
+	"errors"
+	"fmt"
+
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-// Migrate runs all schema creation statements.
-// It is safe to call on every startup — IF NOT EXISTS means it won't
-// recreate or wipe tables that already exist.
-func Migrate(db *sql.DB) error {
-    query := `
-    CREATE TABLE IF NOT EXISTS services (
-        id         SERIAL PRIMARY KEY,
-        name       TEXT NOT NULL UNIQUE,
-        repo_url   TEXT NOT NULL,
-        owner      TEXT NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
-    );`
+// Migrate runs all pending migration files from the migrations/ directory.
+// It is safe to call on every startup — already-run migrations are skipped.
+// The migrations directory path is relative to where the binary runs from.
+func Migrate(db *sql.DB, migrationsPath string) error {
+	// Create a Postgres driver instance for golang-migrate.
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		return fmt.Errorf("could not create migration driver: %w", err)
+	}
 
-    if _, err := db.Exec(query); err != nil {
-        return fmt.Errorf("failed to run migrations: %w", err)
-    }
+	// Point migrate at our SQL files.
+	// "file://" prefix tells migrate to read from the filesystem.
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://"+migrationsPath,
+		"postgres",
+		driver,
+	)
+	if err != nil {
+		return fmt.Errorf("could not create migrate instance: %w", err)
+	}
 
-    return nil
+	// Run all pending migrations.
+	// migrate.ErrNoChange means everything is already up to date — not an error.
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+		return fmt.Errorf("could not run migrations: %w", err)
+	}
+
+	return nil
 }
