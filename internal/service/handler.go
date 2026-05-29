@@ -7,26 +7,31 @@ import (
 	"net/http"
 )
 
-// Storer is the interface the handler depends on.
-// Any type that implements these two methods can be used —
-// the real Store in production, a fake in tests.
+// Bootstrapper is the interface for bootstrapping a new service
+// in the GitOps repo. Defined here to avoid import cycles —
+// the service package doesn't import the deploy package directly.
+type Bootstrapper interface {
+	Bootstrap(serviceName string) error
+}
+
+// Storer is the interface the handler depends on for DB operations.
 type Storer interface {
 	Create(req CreateRequest) (Service, error)
 	List() ([]Service, error)
 }
 
-// Handler now depends on the interface, not the concrete type.
+// Handler holds dependencies for service HTTP handlers.
 type Handler struct {
-	store Storer
+	store       Storer
+	bootstrapper Bootstrapper
 }
 
-func NewHandler(store Storer) *Handler {
-	return &Handler{store: store}
+// NewHandler creates a new Handler.
+func NewHandler(store Storer, bootstrapper Bootstrapper) *Handler {
+	return &Handler{store: store, bootstrapper: bootstrapper}
 }
 
-// Create handles POST /services.
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
-	// Decode the request body into CreateRequest.
 	var req CreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		slog.Error("failed to decode request", "error", err, "handler", "service.Create")
@@ -34,16 +39,14 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Basic validation — all fields are required.
 	if req.Name == "" || req.RepoURL == "" || req.Owner == "" {
 		http.Error(w, "name, repo_url and owner are required", http.StatusBadRequest)
 		return
 	}
 
-	// Delegate to store — handler does not know about SQL.
+	// Register in the database first.
 	svc, err := h.store.Create(req)
 	if err != nil {
-		// Inspect the error type — don't treat everything as 500.
 		if errors.Is(err, ErrDuplicate) {
 			http.Error(w, "service already exists", http.StatusConflict)
 			return
@@ -53,28 +56,36 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Respond with the created service.
+	// Bootstrap the GitOps structure for the new service.
+	// We pass the gitops repo URL (not the service's repo URL)
+	// so ArgoCD knows where to find the Helm chart.
+	if err := h.bootstrapper.Bootstrap(svc.Name); err != nil {
+		// Log the error but don't fail the request —
+		// the service is registered in the DB, bootstrap can be retried.
+		slog.Error("failed to bootstrap service", "error", err, "service", svc.Name)
+	} else {
+		slog.Info("service bootstrapped in gitops repo", "service", svc.Name)
+	}
+
 	slog.Info("service created", "service", svc.Name, "owner", svc.Owner)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated) // 201, not 200
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(svc)
 }
 
-// List handles GET /services.
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
-    services, err := h.store.List()
-    if err != nil {
+	services, err := h.store.List()
+	if err != nil {
 		slog.Error("failed to list services", "error", err)
-        http.Error(w, "could not fetch services", http.StatusInternalServerError)
-        return
-    }
+		http.Error(w, "could not fetch services", http.StatusInternalServerError)
+		return
+	}
 
-    // If no services exist yet, return an empty array — not null.
-    if services == nil {
-        services = []Service{}
-    }
+	if services == nil {
+		services = []Service{}
+	}
 
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusOK)
-    json.NewEncoder(w).Encode(services)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(services)
 }

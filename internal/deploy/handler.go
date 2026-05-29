@@ -1,7 +1,6 @@
 package deploy
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"log/slog"
@@ -52,8 +51,8 @@ func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.store.Deploy(context.Background(), serviceName, req.Image); err != nil {
-		slog.Error("failed to deploy service", "error", err, "service", serviceName, "image", req.Image)
+	if err := h.store.Deploy(serviceName, req.Image); err != nil {
+		slog.Error("failed to deploy service", "error", err, "service", serviceName)
 		http.Error(w, "could not deploy service", http.StatusInternalServerError)
 		return
 	}

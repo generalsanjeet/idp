@@ -39,9 +39,19 @@ curl http://localhost:8080/logs/payments
 curl "http://localhost:9091/api/v1/query?query=up"
 curl http://localhost:8080/metrics/payments
 
-
 migrate create -ext sql -dir migrations -seq create_deployments
 
 This creates two new empty files:
 migrations/000002_create_deployments.up.sql
 migrations/000002_create_deployments.down.sql
+
+export DATABASE_URL="postgres://idp:idp@localhost:5432/idp?sslmode=disable"
+export GITOPS_REPO_URL="https://github.com/youractualname/gitops-repo"
+export GITHUB_TOKEN="ghp_xxxxxxxxxxxx"   # your token
+export MIGRATIONS_PATH="./migrations"
+
+kubectl get secret -n argocd argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+
+argocd login localhost:8888 --username admin --insecure
+

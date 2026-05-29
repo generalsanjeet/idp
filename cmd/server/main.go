@@ -46,16 +46,17 @@ func main() {
 
 	slog.Info("migrations complete")
 
-	deployStore, err := deploy.NewStore(cfg.KubeconfigPath)
-	if err != nil {
-		slog.Error("could not create k8s client", "error", err)
-		os.Exit(1)
-	}
-	slog.Info("connected to kubernetes")
+	// GitOps deploy store — no k8s client needed anymore.
+	deployStore := deploy.NewStore(
+		cfg.GitOpsRepoURL,
+		cfg.GitOpsLocalPath,
+		cfg.GitHubToken,
+	)
+	slog.Info("gitops deploy store ready", "repo", cfg.GitOpsRepoURL)
 
 	// Wire up service feature.
     serviceStore := service.NewStore(database)
-    serviceHandler := service.NewHandler(serviceStore)
+	serviceHandler := service.NewHandler(serviceStore, deployStore)
 	deployHandler := deploy.NewHandler(deployStore)
 	logsStore := idplogs.NewStore(cfg.LokiURL)
 	logsHandler := idplogs.NewHandler(logsStore)
@@ -63,7 +64,6 @@ func main() {
 	metricsHandler := metrics.NewHandler(metricsStore)
 
 	r := chi.NewRouter()
-
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 

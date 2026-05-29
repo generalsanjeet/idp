@@ -9,34 +9,17 @@ import (
 // Every env var the application needs is represented as a field here.
 // Nothing else in the app should ever call os.Getenv directly.
 type Config struct {
-	// DatabaseURL is the full Postgres connection string.
-	// Required — no default.
 	DatabaseURL string
-
-	// KubeconfigPath is the path to the kubeconfig file.
-	// Defaults to ~/.kube/config if not set.
-	KubeconfigPath string
-
-	// LokiURL is the base URL of the Loki instance.
-	// Defaults to http://localhost:3100.
 	LokiURL string
-
-	// PrometheusURL is the base URL of the Prometheus instance.
-	// Defaults to http://localhost:9091.
 	PrometheusURL string
-
-	// ServerAddr is the address the HTTP server listens on.
-	// Defaults to :8080.
 	ServerAddr string
 
-	// MigrationsPath is the path to the SQL migration files.
-	// Defaults to ./migrations relative to where the binary runs.
-	MigrationsPath string
+	GitOpsRepoURL   string // e.g. https://github.com/yourname/gitops-repo
+	GitOpsLocalPath string // local path to clone the repo into
+	GitHubToken     string // personal access token for pushing
+	MigrationsPath  string
 }
 
-// Load reads all config from environment variables.
-// It returns an error if any required variable is missing.
-// Call this once at startup — never call os.Getenv anywhere else.
 func Load() (Config, error) {
 	cfg := Config{}
 
@@ -44,12 +27,6 @@ func Load() (Config, error) {
 	cfg.DatabaseURL = os.Getenv("DATABASE_URL")
 	if cfg.DatabaseURL == "" {
 		return Config{}, fmt.Errorf("DATABASE_URL is required")
-	}
-
-	// Optional with defaults.
-	cfg.KubeconfigPath = os.Getenv("KUBECONFIG")
-	if cfg.KubeconfigPath == "" {
-		cfg.KubeconfigPath = os.Getenv("HOME") + "/.kube/config"
 	}
 
 	cfg.LokiURL = os.Getenv("LOKI_URL")
@@ -65,6 +42,22 @@ func Load() (Config, error) {
 	cfg.ServerAddr = os.Getenv("SERVER_ADDR")
 	if cfg.ServerAddr == "" {
 		cfg.ServerAddr = ":8080"
+	}
+
+		// GitOps config.
+	cfg.GitOpsRepoURL = os.Getenv("GITOPS_REPO_URL")
+	if cfg.GitOpsRepoURL == "" {
+		return Config{}, fmt.Errorf("GITOPS_REPO_URL is required")
+	}
+
+	cfg.GitOpsLocalPath = os.Getenv("GITOPS_LOCAL_PATH")
+	if cfg.GitOpsLocalPath == "" {
+		cfg.GitOpsLocalPath = "/tmp/gitops-repo"
+	}
+
+	cfg.GitHubToken = os.Getenv("GITHUB_TOKEN")
+	if cfg.GitHubToken == "" {
+		return Config{}, fmt.Errorf("GITHUB_TOKEN is required")
 	}
 
 	cfg.MigrationsPath = os.Getenv("MIGRATIONS_PATH")

@@ -74,7 +74,7 @@
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
 !_TAG_PARSER_VERSION!SQL	0.0	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROC_CWD	/home/sanjeet/idp/	//
+!_TAG_PROC_CWD	/home/sanjeet/2026/idp/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
@@ -87,6 +87,9 @@
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+Bootstrap	internal/deploy/git.go	/^func (s *Store) Bootstrap(serviceName string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
+Bootstrap	internal/service/handler.go	/^	Bootstrap(serviceName string) error$/;"	n	interface:service.Bootstrapper	typeref:typename:error
+Bootstrapper	internal/service/handler.go	/^type Bootstrapper interface {$/;"	i	package:service
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Connect	internal/db/db.go	/^func Connect(dsn string) (*sql.DB, error) {$/;"	f	package:db	typeref:typename:(*sql.DB, error)
 Create	internal/service/handler.go	/^	Create(req CreateRequest) (Service, error)$/;"	n	interface:service.Storer	typeref:typename:(Service, error)
@@ -98,8 +101,8 @@ CreatedAt	internal/service/model.go	/^    CreatedAt time.Time `json:"created_at"
 Data	internal/logs/loki.go	/^	Data   struct {$/;"	m	struct:logs.lokiResponse	typeref:typename:struct { Result []struct { Values [][]string `json:"values"`; } `json:"result"`; }
 Data	internal/metrics/prometheus.go	/^	Data   struct {$/;"	m	struct:metrics.prometheusResponse	typeref:typename:struct { Result []struct { Metric map[string]string `json:"metric"`; Value []interface{} `json:"value"`; } `json:"result"`; }
 DatabaseURL	internal/config/config.go	/^	DatabaseURL string$/;"	m	struct:config.Config	typeref:typename:string
+Deploy	internal/deploy/git.go	/^func (s *Store) Deploy(serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
-Deploy	internal/deploy/k8s.go	/^func (s *Store) Deploy(ctx context.Context, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 ErrDuplicate	internal/service/store.go	/^	ErrDuplicate = errors.New("service already exists")$/;"	v	package:service
 ErrNotFound	internal/service/store.go	/^	ErrNotFound  = errors.New("service not found")$/;"	v	package:service
 GetByName	internal/service/store.go	/^func (s *Store) GetByName(name string) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
@@ -107,6 +110,9 @@ GetLogs	internal/logs/handler.go	/^func (h *Handler) GetLogs(w http.ResponseWrit
 GetLogs	internal/logs/loki.go	/^func (s *Store) GetLogs(serviceName string, limit int) ([]LogLine, error) {$/;"	f	struct:logs.Store	typeref:typename:([]LogLine, error)
 GetMetrics	internal/metrics/handler.go	/^func (h *Handler) GetMetrics(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:metrics.Handler
 GetMetrics	internal/metrics/prometheus.go	/^func (s *Store) GetMetrics(serviceName string) (ServiceMetrics, error) {$/;"	f	struct:metrics.Store	typeref:typename:(ServiceMetrics, error)
+GitHubToken	internal/config/config.go	/^	GitHubToken     string \/\/ personal access token for pushing$/;"	m	struct:config.Config	typeref:typename:string
+GitOpsLocalPath	internal/config/config.go	/^	GitOpsLocalPath string \/\/ local path to clone the repo into$/;"	m	struct:config.Config	typeref:typename:string
+GitOpsRepoURL	internal/config/config.go	/^	GitOpsRepoURL   string \/\/ e.g. https:\/\/github.com\/yourname\/gitops-repo$/;"	m	struct:config.Config	typeref:typename:string
 Handler	internal/deploy/handler.go	/^type Handler struct {$/;"	s	package:deploy
 Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http.Request) {$/;"	f	package:health
 Handler	internal/logs/handler.go	/^type Handler struct {$/;"	s	package:logs
@@ -115,7 +121,6 @@ Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:servic
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
-KubeconfigPath	internal/config/config.go	/^	KubeconfigPath string$/;"	m	struct:config.Config	typeref:typename:string
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 List	internal/service/handler.go	/^	List() ([]Service, error)$/;"	n	interface:service.Storer	typeref:typename:([]Service, error)
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
@@ -125,14 +130,14 @@ Load	internal/config/config.go	/^func Load() (Config, error) {$/;"	f	package:con
 LogLine	internal/logs/loki.go	/^type LogLine struct {$/;"	s	package:logs
 LokiURL	internal/config/config.go	/^	LokiURL string$/;"	m	struct:config.Config	typeref:typename:string
 Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB, migrationsPath string) error {$/;"	f	package:db	typeref:typename:error
-MigrationsPath	internal/config/config.go	/^	MigrationsPath string$/;"	m	struct:config.Config	typeref:typename:string
+MigrationsPath	internal/config/config.go	/^	MigrationsPath  string$/;"	m	struct:config.Config	typeref:typename:string
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
 NewHandler	internal/logs/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:logs	typeref:typename:*Handler
 NewHandler	internal/metrics/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:metrics	typeref:typename:*Handler
-NewHandler	internal/service/handler.go	/^func NewHandler(store Storer) *Handler {$/;"	f	package:service	typeref:typename:*Handler
-NewStore	internal/deploy/k8s.go	/^func NewStore(kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
+NewHandler	internal/service/handler.go	/^func NewHandler(store Storer, bootstrapper Bootstrapper) *Handler {$/;"	f	package:service	typeref:typename:*Handler
+NewStore	internal/deploy/git.go	/^func NewStore(repoURL, localPath, token string) *Store {$/;"	f	package:deploy	typeref:typename:*Store
 NewStore	internal/logs/loki.go	/^func NewStore(lokiURL string) *Store {$/;"	f	package:logs	typeref:typename:*Store
 NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *Store {$/;"	f	package:metrics	typeref:typename:*Store
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
@@ -152,7 +157,7 @@ Status	internal/health/handler.go	/^	Status string `json:"status"`$/;"	m	struct:
 Status	internal/logs/loki.go	/^	Status string `json:"status"`$/;"	m	struct:logs.lokiResponse	typeref:typename:string
 Status	internal/metrics/prometheus.go	/^	Status        string `json:"status"` \/\/ "healthy" or "degraded"$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 Status	internal/metrics/prometheus.go	/^	Status string `json:"status"`$/;"	m	struct:metrics.prometheusResponse	typeref:typename:string
-Store	internal/deploy/k8s.go	/^type Store struct {$/;"	s	package:deploy
+Store	internal/deploy/git.go	/^type Store struct {$/;"	s	package:deploy
 Store	internal/logs/loki.go	/^type Store struct {$/;"	s	package:logs
 Store	internal/metrics/prometheus.go	/^type Store struct {$/;"	s	package:metrics
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
@@ -166,35 +171,43 @@ TestStoreCreate_Duplicate	internal/service/store_test.go	/^func TestStoreCreate_
 TestStoreCreate_Success	internal/service/store_test.go	/^func TestStoreCreate_Success(t *testing.T) {$/;"	f	package:service
 TestStoreList_Empty	internal/service/store_test.go	/^func TestStoreList_Empty(t *testing.T) {$/;"	f	package:service
 Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	struct:logs.LogLine	typeref:typename:string
-appsv1	internal/deploy/k8s.go	/^	appsv1 "k8s.io\/api\/apps\/v1"$/;"	P	package:k8s.io/api/apps/v1
+bootstrapper	internal/service/handler.go	/^	bootstrapper Bootstrapper$/;"	m	struct:service.Handler	typeref:typename:Bootstrapper
 build	Makefile	/^build:$/;"	t
-client	internal/deploy/k8s.go	/^	client kubernetes.Interface$/;"	m	struct:deploy.Store	typeref:typename:kubernetes.Interface
+commitAndPush	internal/deploy/git.go	/^func (s *Store) commitAndPush(repo *git.Repository, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 config	internal/config/config.go	/^package config$/;"	p
-corev1	internal/deploy/k8s.go	/^	corev1 "k8s.io\/api\/core\/v1"$/;"	P	package:k8s.io/api/core/v1
+createArgoCDApp	internal/deploy/git.go	/^func (s *Store) createArgoCDApp(serviceName, repoURL string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 createFn	internal/service/handler_test.go	/^	createFn func(req CreateRequest) (Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func(req CreateRequest) (Service, error)
+createHelmChart	internal/deploy/git.go	/^func (s *Store) createHelmChart(serviceName string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
+created_at	migrations/000001_create_services.up.sql	/^    created_at TIMESTAMP NOT NULL DEFAULT NOW()$/;"	E	table:services
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
 db	internal/service/store.go	/^    db *sql.DB$/;"	m	struct:service.Store	typeref:typename:*sql.DB
+deploy	internal/deploy/git.go	/^package deploy$/;"	p
 deploy	internal/deploy/handler.go	/^package deploy$/;"	p
-deploy	internal/deploy/k8s.go	/^package deploy$/;"	p
 deployRequest	internal/deploy/handler.go	/^type deployRequest struct {$/;"	s	package:deploy
 deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	package:deploy
 fakeStore	internal/service/handler_test.go	/^type fakeStore struct {$/;"	s	package:service
 health	internal/health/handler.go	/^package health$/;"	p
+id	migrations/000001_create_services.up.sql	/^    id         SERIAL PRIMARY KEY,$/;"	E	table:services
 idp	README.md	/^# idp$/;"	c
 idplogs	cmd/server/main.go	/^	idplogs "github.com\/generalsanjeet\/idp\/internal\/logs"$/;"	P	package:github.com/generalsanjeet/idp/internal/logs
 listFn	internal/service/handler_test.go	/^	listFn   func() ([]Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func() ([]Service, error)
+localPath	internal/deploy/git.go	/^	localPath string \/\/ where to clone the repo locally$/;"	m	struct:deploy.Store	typeref:typename:string
 logs	internal/logs/handler.go	/^package logs$/;"	p
 logs	internal/logs/loki.go	/^package logs$/;"	p
 lokiResponse	internal/logs/loki.go	/^type lokiResponse struct {$/;"	s	package:logs
 lokiURL	internal/logs/loki.go	/^	lokiURL string \/\/ e.g. http:\/\/localhost:3100$/;"	m	struct:logs.Store	typeref:typename:string
 main	cmd/server/main.go	/^func main() {$/;"	f	package:main
 main	cmd/server/main.go	/^package main$/;"	p
-metav1	internal/deploy/k8s.go	/^	metav1 "k8s.io\/apimachinery\/pkg\/apis\/meta\/v1"$/;"	P	package:k8s.io/apimachinery/pkg/apis/meta/v1
 metrics	internal/metrics/handler.go	/^package metrics$/;"	p
 metrics	internal/metrics/prometheus.go	/^package metrics$/;"	p
+name	migrations/000001_create_services.up.sql	/^    name       TEXT NOT NULL UNIQUE,$/;"	E	table:services
+owner	migrations/000001_create_services.up.sql	/^    owner      TEXT NOT NULL,$/;"	E	table:services
+parseImage	internal/deploy/git.go	/^func parseImage(image string) (repository, tag string) {$/;"	f	package:deploy	typeref:typename:(repository, tag string)
 prometheusResponse	internal/metrics/prometheus.go	/^type prometheusResponse struct {$/;"	s	package:metrics
 prometheusURL	internal/metrics/prometheus.go	/^	prometheusURL string \/\/ e.g. http:\/\/localhost:9091$/;"	m	struct:metrics.Store	typeref:typename:string
+repoURL	internal/deploy/git.go	/^	repoURL   string \/\/ remote GitHub repo URL$/;"	m	struct:deploy.Store	typeref:typename:string
+repo_url	migrations/000001_create_services.up.sql	/^    repo_url   TEXT NOT NULL,$/;"	E	table:services
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 run	Makefile	/^run:$/;"	t
 service	internal/service/handler.go	/^package service$/;"	p
@@ -202,8 +215,12 @@ service	internal/service/handler_test.go	/^package service$/;"	p
 service	internal/service/model.go	/^package service$/;"	p
 service	internal/service/store.go	/^package service$/;"	p
 service	internal/service/store_test.go	/^package service$/;"	p
+services	migrations/000001_create_services.up.sql	/^CREATE TABLE IF NOT EXISTS services ($/;"	t
 store	internal/deploy/handler.go	/^	store *Store$/;"	m	struct:deploy.Handler	typeref:typename:*Store
 store	internal/logs/handler.go	/^	store *Store$/;"	m	struct:logs.Handler	typeref:typename:*Store
 store	internal/metrics/handler.go	/^	store *Store$/;"	m	struct:metrics.Handler	typeref:typename:*Store
-store	internal/service/handler.go	/^	store Storer$/;"	m	struct:service.Handler	typeref:typename:Storer
+store	internal/service/handler.go	/^	store       Storer$/;"	m	struct:service.Handler	typeref:typename:Storer
+syncRepo	internal/deploy/git.go	/^func (s *Store) syncRepo() (*git.Repository, error) {$/;"	f	struct:deploy.Store	typeref:typename:(*git.Repository, error)
 test	Makefile	/^test:$/;"	t
+token	internal/deploy/git.go	/^	token     string \/\/ GitHub personal access token$/;"	m	struct:deploy.Store	typeref:typename:string
+updateValues	internal/deploy/git.go	/^func (s *Store) updateValues(serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
