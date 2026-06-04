@@ -30,6 +30,15 @@
 !_TAG_KIND_DESCRIPTION!Go	s,struct	/structs/
 !_TAG_KIND_DESCRIPTION!Go	t,type	/types/
 !_TAG_KIND_DESCRIPTION!Go	v,var	/variables/
+!_TAG_KIND_DESCRIPTION!HTML	C,stylesheet	/stylesheets/
+!_TAG_KIND_DESCRIPTION!HTML	I,id	/identifiers/
+!_TAG_KIND_DESCRIPTION!HTML	J,script	/scripts/
+!_TAG_KIND_DESCRIPTION!HTML	a,anchor	/named anchors/
+!_TAG_KIND_DESCRIPTION!HTML	c,class	/classes/
+!_TAG_KIND_DESCRIPTION!HTML	h,heading1	/H1 headings/
+!_TAG_KIND_DESCRIPTION!HTML	i,heading2	/H2 headings/
+!_TAG_KIND_DESCRIPTION!HTML	j,heading3	/H3 headings/
+!_TAG_KIND_DESCRIPTION!HTML	t,title	/titles/
 !_TAG_KIND_DESCRIPTION!Make	I,makefile	/makefiles/
 !_TAG_KIND_DESCRIPTION!Make	m,macro	/macros/
 !_TAG_KIND_DESCRIPTION!Make	t,target	/targets/
@@ -70,6 +79,7 @@
 !_TAG_OUTPUT_VERSION	1.1	/current.age/
 !_TAG_PARSER_VERSION!DTD	0.0	/current.age/
 !_TAG_PARSER_VERSION!Go	0.0	/current.age/
+!_TAG_PARSER_VERSION!HTML	0.0	/current.age/
 !_TAG_PARSER_VERSION!Make	1.1	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
 !_TAG_PARSER_VERSION!SQL	0.0	/current.age/
@@ -85,8 +95,18 @@
 !_TAG_ROLE_DESCRIPTION!DTD!parameterEntity	partOfAttDef	/part of attribute definition/
 !_TAG_ROLE_DESCRIPTION!Go!package	imported	/imported package/
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
+!_TAG_ROLE_DESCRIPTION!HTML!class	attribute	/assigned as attributes/
+!_TAG_ROLE_DESCRIPTION!HTML!script	extFile	/referenced as external files/
+!_TAG_ROLE_DESCRIPTION!HTML!stylesheet	extFile	/referenced as external files/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+1. Start infrastructure	README.md	/^### 1. Start infrastructure$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+2. Start port-forwards	README.md	/^### 2. Start port-forwards$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+3. Configure environment	README.md	/^### 3. Configure environment$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+4. Run the IDP	README.md	/^### 4. Run the IDP$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+5. Open the UI	README.md	/^### 5. Open the UI$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+API	README.md	/^## API$/;"	s	chapter:Internal Developer Platform (IDP)
+Architecture	README.md	/^## Architecture$/;"	s	chapter:Internal Developer Platform (IDP)
 Bootstrap	internal/deploy/git.go	/^func (s *Store) Bootstrap(serviceName string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 Bootstrap	internal/service/handler.go	/^	Bootstrap(serviceName string) error$/;"	n	interface:service.Bootstrapper	typeref:typename:error
 Bootstrapper	internal/service/handler.go	/^type Bootstrapper interface {$/;"	i	package:service
@@ -121,6 +141,9 @@ Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:servic
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
+Internal Developer Platform	ui/index.html	/^  <title>Internal Developer Platform<\/title>$/;"	j
+Internal Developer Platform (IDP)	README.md	/^# Internal Developer Platform (IDP)$/;"	c
+Known limitations / future work	README.md	/^## Known limitations \/ future work$/;"	s	chapter:Internal Developer Platform (IDP)
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 List	internal/service/handler.go	/^	List() ([]Service, error)$/;"	n	interface:service.Storer	typeref:typename:([]Service, error)
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
@@ -143,10 +166,13 @@ NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *S
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
 Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+Prerequisites	README.md	/^### Prerequisites$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+Project structure	README.md	/^## Project structure$/;"	s	chapter:Internal Developer Platform (IDP)
 PrometheusURL	internal/config/config.go	/^	PrometheusURL string$/;"	m	struct:config.Config	typeref:typename:string
 ReadyReplicas	internal/metrics/prometheus.go	/^	ReadyReplicas string `json:"ready_replicas"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+Run locally	README.md	/^## Run locally$/;"	s	chapter:Internal Developer Platform (IDP)
 ServerAddr	internal/config/config.go	/^	ServerAddr string$/;"	m	struct:config.Config	typeref:typename:string
 Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Service	internal/metrics/prometheus.go	/^	Service       string `json:"service"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
@@ -162,6 +188,7 @@ Store	internal/logs/loki.go	/^type Store struct {$/;"	s	package:logs
 Store	internal/metrics/prometheus.go	/^type Store struct {$/;"	s	package:metrics
 Store	internal/service/store.go	/^type Store struct {$/;"	s	package:service
 Storer	internal/service/handler.go	/^type Storer interface {$/;"	i	package:service
+Tech stack	README.md	/^## Tech stack$/;"	s	chapter:Internal Developer Platform (IDP)
 TestHandlerCreate_Duplicate	internal/service/handler_test.go	/^func TestHandlerCreate_Duplicate(t *testing.T) {$/;"	f	package:service
 TestHandlerCreate_MissingFields	internal/service/handler_test.go	/^func TestHandlerCreate_MissingFields(t *testing.T) {$/;"	f	package:service
 TestHandlerCreate_Success	internal/service/handler_test.go	/^func TestHandlerCreate_Success(t *testing.T) {$/;"	f	package:service
@@ -171,6 +198,8 @@ TestStoreCreate_Duplicate	internal/service/store_test.go	/^func TestStoreCreate_
 TestStoreCreate_Success	internal/service/store_test.go	/^func TestStoreCreate_Success(t *testing.T) {$/;"	f	package:service
 TestStoreList_Empty	internal/service/store_test.go	/^func TestStoreList_Empty(t *testing.T) {$/;"	f	package:service
 Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	struct:logs.LogLine	typeref:typename:string
+What I learned building this	README.md	/^## What I learned building this$/;"	s	chapter:Internal Developer Platform (IDP)
+What it does	README.md	/^## What it does$/;"	s	chapter:Internal Developer Platform (IDP)
 bootstrapper	internal/service/handler.go	/^	bootstrapper Bootstrapper$/;"	m	struct:service.Handler	typeref:typename:Bootstrapper
 build	Makefile	/^build:$/;"	t
 commitAndPush	internal/deploy/git.go	/^func (s *Store) commitAndPush(repo *git.Repository, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
@@ -189,7 +218,6 @@ deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	p
 fakeStore	internal/service/handler_test.go	/^type fakeStore struct {$/;"	s	package:service
 health	internal/health/handler.go	/^package health$/;"	p
 id	migrations/000001_create_services.up.sql	/^    id         SERIAL PRIMARY KEY,$/;"	E	table:services
-idp	README.md	/^# idp$/;"	c
 idplogs	cmd/server/main.go	/^	idplogs "github.com\/generalsanjeet\/idp\/internal\/logs"$/;"	P	package:github.com/generalsanjeet/idp/internal/logs
 listFn	internal/service/handler_test.go	/^	listFn   func() ([]Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func() ([]Service, error)
 localPath	internal/deploy/git.go	/^	localPath string \/\/ where to clone the repo locally$/;"	m	struct:deploy.Store	typeref:typename:string
@@ -204,11 +232,13 @@ metrics	internal/metrics/prometheus.go	/^package metrics$/;"	p
 name	migrations/000001_create_services.up.sql	/^    name       TEXT NOT NULL UNIQUE,$/;"	E	table:services
 owner	migrations/000001_create_services.up.sql	/^    owner      TEXT NOT NULL,$/;"	E	table:services
 parseImage	internal/deploy/git.go	/^func parseImage(image string) (repository, tag string) {$/;"	f	package:deploy	typeref:typename:(repository, tag string)
+port-forwards	Makefile	/^port-forwards:$/;"	t
 prometheusResponse	internal/metrics/prometheus.go	/^type prometheusResponse struct {$/;"	s	package:metrics
 prometheusURL	internal/metrics/prometheus.go	/^	prometheusURL string \/\/ e.g. http:\/\/localhost:9091$/;"	m	struct:metrics.Store	typeref:typename:string
 repoURL	internal/deploy/git.go	/^	repoURL   string \/\/ remote GitHub repo URL$/;"	m	struct:deploy.Store	typeref:typename:string
 repo_url	migrations/000001_create_services.up.sql	/^    repo_url   TEXT NOT NULL,$/;"	E	table:services
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
+root	ui/index.html	/^  <div id="root"><\/div>$/;"	I
 run	Makefile	/^run:$/;"	t
 service	internal/service/handler.go	/^package service$/;"	p
 service	internal/service/handler_test.go	/^package service$/;"	p

@@ -9,9 +9,9 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 
 	"github.com/generalsanjeet/idp/internal/config"
-	"github.com/generalsanjeet/idp/internal/health"
-	"github.com/generalsanjeet/idp/internal/deploy"
 	"github.com/generalsanjeet/idp/internal/db"
+	"github.com/generalsanjeet/idp/internal/deploy"
+	"github.com/generalsanjeet/idp/internal/health"
 	idplogs "github.com/generalsanjeet/idp/internal/logs"
 	"github.com/generalsanjeet/idp/internal/metrics"
 	"github.com/generalsanjeet/idp/internal/service"
@@ -55,7 +55,7 @@ func main() {
 	slog.Info("gitops deploy store ready", "repo", cfg.GitOpsRepoURL)
 
 	// Wire up service feature.
-    serviceStore := service.NewStore(database)
+	serviceStore := service.NewStore(database)
 	serviceHandler := service.NewHandler(serviceStore, deployStore)
 	deployHandler := deploy.NewHandler(deployStore)
 	logsStore := idplogs.NewStore(cfg.LokiURL)
@@ -73,6 +73,11 @@ func main() {
 	r.Post("/deploy/{service}", deployHandler.Deploy)
 	r.Get("/logs/{service}", logsHandler.GetLogs)
 	r.Get("/metrics/{service}", metricsHandler.GetMetrics)
+
+	//r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("./ui"))))
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./ui/index.html")
+	})
 
 	slog.Info("IDP server starting", "addr", cfg.ServerAddr)
 	if err := http.ListenAndServe(cfg.ServerAddr, r); err != nil {
