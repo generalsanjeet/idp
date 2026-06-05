@@ -97,7 +97,7 @@ Loki          Prometheus
 
 ### Prerequisites
 
-- Go 1.22+
+- Go 1.26+
 - Docker
 - Kind
 - kubectl
