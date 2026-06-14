@@ -200,3 +200,40 @@ make it better" methodology — no frameworks, no shortcuts. Every
 architectural decision (sentinel errors, interface-based testing,
 GitOps over direct k8s API calls, structured logging) was made
 deliberately after understanding the problem it solves.
+
+
+
+# few commands
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base 64 -d
+argocd login localhost:8888 --username admin --insecure
+
+argocd app list
+argocd app get <application-naem>
+ngrok http 8080
+
+# Apply the ArgoCD application for test-service
+kubectl apply -f /tmp/gitops-repo/argocd/test-service.yaml
+
+# Wait a few seconds then sync
+argocd app sync test-service
+
+curl http://localhost:8080/services
+
+curl -X POST http://localhost:8080/services \
+  -H "Content-Type: application/json" \
+  -d '{"name":"gateway","repo_url":"https://github.com/org/gateway","owner":"team-core"}'
+
+curl -X POST http://localhost:8080/deploy/gateway \
+  -H "Content-Type: application/json" \
+  -d '{"image":"nginx:latest"}'
+
+curl http://localhost:8080/logs/gateway
+curl http://localhost:8080/metrics/gateway
+
+ 
+# to  test promethus and loki in k8s
+kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9091:9090
+curl http://localhost:9091/api/v1/query?query=up
+
+kubectl port-forward -n monitoring svc/loki 3100:3100
+curl http://localhost:3100/loki/api/v1/labels

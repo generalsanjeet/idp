@@ -106,6 +106,7 @@
 4. Run the IDP	README.md	/^### 4. Run the IDP$/;"	S	section:Internal Developer Platform (IDP)""Run locally
 5. Open the UI	README.md	/^### 5. Open the UI$/;"	S	section:Internal Developer Platform (IDP)""Run locally
 API	README.md	/^## API$/;"	s	chapter:Internal Developer Platform (IDP)
+Apply the ArgoCD application for test-service	README.md	/^# Apply the ArgoCD application for test-service$/;"	c
 Architecture	README.md	/^## Architecture$/;"	s	chapter:Internal Developer Platform (IDP)
 Bootstrap	internal/deploy/git.go	/^func (s *Store) Bootstrap(serviceName string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 Bootstrap	internal/service/handler.go	/^	Bootstrap(serviceName string) error$/;"	n	interface:service.Bootstrapper	typeref:typename:error
@@ -144,6 +145,7 @@ Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:dep
 Internal Developer Platform	ui/index.html	/^  <title>Internal Developer Platform<\/title>$/;"	j
 Internal Developer Platform (IDP)	README.md	/^# Internal Developer Platform (IDP)$/;"	c
 Known limitations / future work	README.md	/^## Known limitations \/ future work$/;"	s	chapter:Internal Developer Platform (IDP)
+KubeconfigPath	internal/config/config.go	/^	KubeconfigPath  string$/;"	m	struct:config.Config	typeref:typename:string
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
 List	internal/service/handler.go	/^	List() ([]Service, error)$/;"	n	interface:service.Storer	typeref:typename:([]Service, error)
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
@@ -160,7 +162,7 @@ NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {
 NewHandler	internal/logs/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:logs	typeref:typename:*Handler
 NewHandler	internal/metrics/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:metrics	typeref:typename:*Handler
 NewHandler	internal/service/handler.go	/^func NewHandler(store Storer, bootstrapper Bootstrapper) *Handler {$/;"	f	package:service	typeref:typename:*Handler
-NewStore	internal/deploy/git.go	/^func NewStore(repoURL, localPath, token string) *Store {$/;"	f	package:deploy	typeref:typename:*Store
+NewStore	internal/deploy/git.go	/^func NewStore(repoURL, localPath, token, kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
 NewStore	internal/logs/loki.go	/^func NewStore(lokiURL string) *Store {$/;"	f	package:logs	typeref:typename:*Store
 NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *Store {$/;"	f	package:metrics	typeref:typename:*Store
 NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	package:service	typeref:typename:*Store
@@ -198,8 +200,10 @@ TestStoreCreate_Duplicate	internal/service/store_test.go	/^func TestStoreCreate_
 TestStoreCreate_Success	internal/service/store_test.go	/^func TestStoreCreate_Success(t *testing.T) {$/;"	f	package:service
 TestStoreList_Empty	internal/service/store_test.go	/^func TestStoreList_Empty(t *testing.T) {$/;"	f	package:service
 Timestamp	internal/logs/loki.go	/^	Timestamp string `json:"timestamp"`$/;"	m	struct:logs.LogLine	typeref:typename:string
+Wait a few seconds then sync	README.md	/^# Wait a few seconds then sync$/;"	c
 What I learned building this	README.md	/^## What I learned building this$/;"	s	chapter:Internal Developer Platform (IDP)
 What it does	README.md	/^## What it does$/;"	s	chapter:Internal Developer Platform (IDP)
+applyArgoCDApp	internal/deploy/git.go	/^func (s *Store) applyArgoCDApp(ctx context.Context, serviceName string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 bootstrapper	internal/service/handler.go	/^	bootstrapper Bootstrapper$/;"	m	struct:service.Handler	typeref:typename:Bootstrapper
 build	Makefile	/^build:$/;"	t
 commitAndPush	internal/deploy/git.go	/^func (s *Store) commitAndPush(repo *git.Repository, serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
@@ -216,9 +220,12 @@ deploy	internal/deploy/handler.go	/^package deploy$/;"	p
 deployRequest	internal/deploy/handler.go	/^type deployRequest struct {$/;"	s	package:deploy
 deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	package:deploy
 fakeStore	internal/service/handler_test.go	/^type fakeStore struct {$/;"	s	package:service
+few commands	README.md	/^# few commands$/;"	c
 health	internal/health/handler.go	/^package health$/;"	p
 id	migrations/000001_create_services.up.sql	/^    id         SERIAL PRIMARY KEY,$/;"	E	table:services
 idplogs	cmd/server/main.go	/^	idplogs "github.com\/generalsanjeet\/idp\/internal\/logs"$/;"	P	package:github.com/generalsanjeet/idp/internal/logs
+k8sClient	internal/deploy/git.go	/^	k8sClient  dynamic.Interface \/\/ dynamic client for applying ArgoCD CRDs$/;"	m	struct:deploy.Store	typeref:typename:dynamic.Interface
+kyaml	internal/deploy/git.go	/^	kyaml "sigs.k8s.io\/yaml"$/;"	P	package:sigs.k8s.io/yaml
 listFn	internal/service/handler_test.go	/^	listFn   func() ([]Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func() ([]Service, error)
 localPath	internal/deploy/git.go	/^	localPath string \/\/ where to clone the repo locally$/;"	m	struct:deploy.Store	typeref:typename:string
 logs	internal/logs/handler.go	/^package logs$/;"	p
@@ -227,8 +234,10 @@ lokiResponse	internal/logs/loki.go	/^type lokiResponse struct {$/;"	s	package:lo
 lokiURL	internal/logs/loki.go	/^	lokiURL string \/\/ e.g. http:\/\/localhost:3100$/;"	m	struct:logs.Store	typeref:typename:string
 main	cmd/server/main.go	/^func main() {$/;"	f	package:main
 main	cmd/server/main.go	/^package main$/;"	p
+metav1	internal/deploy/git.go	/^	metav1 "k8s.io\/apimachinery\/pkg\/apis\/meta\/v1"$/;"	P	package:k8s.io/apimachinery/pkg/apis/meta/v1
 metrics	internal/metrics/handler.go	/^package metrics$/;"	p
 metrics	internal/metrics/prometheus.go	/^package metrics$/;"	p
+mustConvertYAMLToJSON	internal/deploy/git.go	/^func mustConvertYAMLToJSON(data []byte) []byte {$/;"	f	package:deploy	typeref:typename:[]byte
 name	migrations/000001_create_services.up.sql	/^    name       TEXT NOT NULL UNIQUE,$/;"	E	table:services
 owner	migrations/000001_create_services.up.sql	/^    owner      TEXT NOT NULL,$/;"	E	table:services
 parseImage	internal/deploy/git.go	/^func parseImage(image string) (repository, tag string) {$/;"	f	package:deploy	typeref:typename:(repository, tag string)
@@ -252,5 +261,6 @@ store	internal/metrics/handler.go	/^	store *Store$/;"	m	struct:metrics.Handler	t
 store	internal/service/handler.go	/^	store       Storer$/;"	m	struct:service.Handler	typeref:typename:Storer
 syncRepo	internal/deploy/git.go	/^func (s *Store) syncRepo() (*git.Repository, error) {$/;"	f	struct:deploy.Store	typeref:typename:(*git.Repository, error)
 test	Makefile	/^test:$/;"	t
+to  test promethus and loki in k8s	README.md	/^# to  test promethus and loki in k8s$/;"	c
 token	internal/deploy/git.go	/^	token     string \/\/ GitHub personal access token$/;"	m	struct:deploy.Store	typeref:typename:string
 updateValues	internal/deploy/git.go	/^func (s *Store) updateValues(serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error

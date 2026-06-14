@@ -18,6 +18,7 @@ type Config struct {
 	GitOpsLocalPath string // local path to clone the repo into
 	GitHubToken     string // personal access token for pushing
 	MigrationsPath  string
+	KubeconfigPath  string
 }
 
 func Load() (Config, error) {
@@ -63,6 +64,11 @@ func Load() (Config, error) {
 	cfg.MigrationsPath = os.Getenv("MIGRATIONS_PATH")
 	if cfg.MigrationsPath == "" {
 		cfg.MigrationsPath = "./migrations"
+	}
+
+	cfg.KubeconfigPath = os.Getenv("KUBECONFIG")
+	if cfg.KubeconfigPath == "" {
+		cfg.KubeconfigPath = os.Getenv("HOME") + "/.kube/config"
 	}
 
 	return cfg, nil

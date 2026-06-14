@@ -47,11 +47,16 @@ func main() {
 	slog.Info("migrations complete")
 
 	// GitOps deploy store — no k8s client needed anymore.
-	deployStore := deploy.NewStore(
+	deployStore, err := deploy.NewStore(
 		cfg.GitOpsRepoURL,
 		cfg.GitOpsLocalPath,
 		cfg.GitHubToken,
+		cfg.KubeconfigPath, // ← add this
 	)
+	if err != nil {
+		slog.Error("could not create deploy store", "error", err)
+		os.Exit(1)
+	}
 	slog.Info("gitops deploy store ready", "repo", cfg.GitOpsRepoURL)
 
 	// Wire up service feature.

@@ -5,10 +5,20 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"context"
+	"log/slog"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
+
+	"k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic"
+	"k8s.io/client-go/tools/clientcmd"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kyaml "sigs.k8s.io/yaml"
 )
 
 // Store handles all GitOps deploy operations.
@@ -16,15 +26,27 @@ type Store struct {
 	repoURL   string // remote GitHub repo URL
 	localPath string // where to clone the repo locally
 	token     string // GitHub personal access token
+	k8sClient  dynamic.Interface // dynamic client for applying ArgoCD CRDs
 }
 
 // NewStore creates a new GitOps store.
-func NewStore(repoURL, localPath, token string) *Store {
+func NewStore(repoURL, localPath, token, kubeconfigPath string) (*Store, error) {
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfigPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build kubeconfig: %w", err)
+	}
+
+	dynamicClient, err := dynamic.NewForConfig(config)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create dynamic client: %w", err)
+	}
+
 	return &Store{
 		repoURL:   repoURL,
 		localPath: localPath,
 		token:     token,
-	}
+		k8sClient: dynamicClient,
+	}, nil
 }
 
 // Deploy updates the Helm values.yaml for a service and pushes to Git.
@@ -82,7 +104,9 @@ func (s *Store) Bootstrap(serviceName string) error {
 	})
 	if err != nil {
 		if err.Error() == "cannot create empty commit: clean working tree" {
-			return nil
+			// Chart already exists — still apply the ArgoCD manifest
+			// in case it was deleted from the cluster.
+			return s.applyArgoCDApp(context.Background(), serviceName)
 		}
 		return fmt.Errorf("failed to commit: %w", err)
 	}
@@ -94,6 +118,11 @@ func (s *Store) Bootstrap(serviceName string) error {
 		},
 	}); err != nil && err != git.NoErrAlreadyUpToDate {
 		return fmt.Errorf("failed to push: %w", err)
+	}
+
+	// Apply the ArgoCD Application to the cluster.
+	if err := s.applyArgoCDApp(context.Background(), serviceName); err != nil {
+		return fmt.Errorf("failed to apply argocd app: %w", err)
 	}
 
 	return nil
@@ -344,4 +373,83 @@ func parseImage(image string) (repository, tag string) {
 		}
 	}
 	return image, "latest"
+}
+
+// applyArgoCDApp applies the ArgoCD Application manifest to the cluster.
+// This is equivalent to: kubectl apply -f argocd/service.yaml
+// We use the dynamic client because ArgoCD Application is a CRD —
+// not a built-in Kubernetes type.
+func (s *Store) applyArgoCDApp(ctx context.Context, serviceName string) error {
+	// ArgoCD Application GVR — Group, Version, Resource.
+	// This identifies the CRD we're working with.
+	gvr := schema.GroupVersionResource{
+		Group:    "argoproj.io",
+		Version:  "v1alpha1",
+		Resource: "applications",
+	}
+
+	// Read the manifest file we just wrote to the gitops repo.
+	manifestPath := filepath.Join(s.localPath, "argocd", serviceName+".yaml")
+	data, err := os.ReadFile(manifestPath)
+	if err != nil {
+		return fmt.Errorf("failed to read argocd manifest: %w", err)
+	}
+
+	// Parse YAML into an unstructured object.
+	// Unstructured is Go's way of representing arbitrary k8s resources
+	// without needing the concrete type.
+	obj := &unstructured.Unstructured{}
+	if err := obj.UnmarshalJSON(
+		mustConvertYAMLToJSON(data),
+	); err != nil {
+		return fmt.Errorf("failed to parse manifest: %w", err)
+	}
+
+	slog.Info("applying argocd application", "service", serviceName, "namespace", "argocd")
+
+	// Try to create the Application.
+	_, err = s.k8sClient.Resource(gvr).
+		Namespace("argocd").
+		Create(ctx, obj, metav1.CreateOptions{})
+	if err == nil {
+		slog.Info("argocd application created successfully", "service", serviceName)
+		return nil // created successfully
+	}
+
+	slog.Error("create failed", "error", err, "service", serviceName)
+
+	// If it already exists, update it.
+	if errors.IsAlreadyExists(err) {
+		slog.Info("application already exists, updating", "service", serviceName)
+		// Get existing to retrieve resourceVersion (required for updates).
+		existing, err := s.k8sClient.Resource(gvr).
+			Namespace("argocd").
+			Get(ctx, serviceName, metav1.GetOptions{})
+		if err != nil {
+			return fmt.Errorf("failed to get existing application: %w", err)
+		}
+		obj.SetResourceVersion(existing.GetResourceVersion())
+
+		_, err = s.k8sClient.Resource(gvr).
+			Namespace("argocd").
+			Update(ctx, obj, metav1.UpdateOptions{})
+		if err != nil {
+			return fmt.Errorf("failed to update application: %w", err)
+		}
+		slog.Info("argocd application updated successfully", "service", serviceName)
+		return nil
+	}
+
+	return fmt.Errorf("failed to apply argocd application: %w", err)
+}
+
+// mustConvertYAMLToJSON converts YAML bytes to JSON bytes.
+// Used because the dynamic client expects JSON.
+func mustConvertYAMLToJSON(data []byte) []byte {
+	// Use the k8s YAML library which handles multi-doc YAML correctly.
+	json, err := kyaml.YAMLToJSON(data)
+	if err != nil {
+		panic(fmt.Sprintf("failed to convert yaml to json: %v", err))
+	}
+	return json
 }
