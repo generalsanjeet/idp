@@ -8,14 +8,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// Recorder is the interface for recording deployment history.
+// Defined here to avoid import cycles between deploy and service packages.
+type Recorder interface {
+	Record(serviceName, image string) error
+}
+
 // Handler holds dependencies for deploy HTTP handlers.
 type Handler struct {
 	store *Store
+	recorder Recorder
 }
 
 // NewHandler creates a new Handler.
-func NewHandler(store *Store) *Handler {
-	return &Handler{store: store}
+func NewHandler(store *Store, recorder Recorder) *Handler {
+	return &Handler{store: store, recorder: recorder}
 }
 
 // deployRequest is what the caller sends.
@@ -55,6 +62,13 @@ func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed to deploy service", "error", err, "service", serviceName)
 		http.Error(w, "could not deploy service", http.StatusInternalServerError)
 		return
+	}
+
+	// Record the deployment in history.
+	// We log but don't fail the request if recording fails —
+	// the deploy already happened, recording is secondary.
+	if err := h.recorder.Record(serviceName, req.Image); err != nil {
+		slog.Error("failed to record deployment", "error", err, "service", serviceName)
 	}
 
 	slog.Info("service deployed", "service", serviceName, "image", req.Image)

@@ -61,8 +61,10 @@ func main() {
 
 	// Wire up service feature.
 	serviceStore := service.NewStore(database)
+	deploymentStore := service.NewDeploymentStore(database)
 	serviceHandler := service.NewHandler(serviceStore, deployStore)
-	deployHandler := deploy.NewHandler(deployStore)
+	deployHandler := deploy.NewHandler(deployStore, deploymentStore)
+	rollbackHandler := deploy.NewRollbackHandler(deployStore, deploymentStore)
 	logsStore := idplogs.NewStore(cfg.LokiURL)
 	logsHandler := idplogs.NewHandler(logsStore)
 	metricsStore := metrics.NewStore(cfg.PrometheusURL)
@@ -76,6 +78,8 @@ func main() {
 	r.Post("/services", serviceHandler.Create)
 	r.Get("/services", serviceHandler.List)
 	r.Post("/deploy/{service}", deployHandler.Deploy)
+	r.Get("/deployments/{service}", rollbackHandler.ListDeployments)
+	r.Post("/rollback/{service}", rollbackHandler.Rollback)
 	r.Get("/logs/{service}", logsHandler.GetLogs)
 	r.Get("/metrics/{service}", metricsHandler.GetMetrics)
 

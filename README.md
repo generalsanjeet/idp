@@ -204,8 +204,6 @@ deliberately after understanding the problem it solves.
 
 
 # few commands
-kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base 64 -d
-argocd login localhost:8888 --username admin --insecure
 
 argocd app list
 argocd app get <application-naem>
@@ -229,7 +227,6 @@ curl -X POST http://localhost:8080/deploy/gateway \
 
 curl http://localhost:8080/logs/gateway
 curl http://localhost:8080/metrics/gateway
-
  
 # to  test promethus and loki in k8s
 kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9091:9090
@@ -237,3 +234,8 @@ curl http://localhost:9091/api/v1/query?query=up
 
 kubectl port-forward -n monitoring svc/loki 3100:3100
 curl http://localhost:3100/loki/api/v1/labels
+
+kubectl port-forward -n argocd svc/argocd-server 8888:443
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base 64 -d
+argocd login localhost:8888 --username admin --insecure
+argocd account get-user-info

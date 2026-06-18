@@ -124,6 +124,9 @@ Data	internal/metrics/prometheus.go	/^	Data   struct {$/;"	m	struct:metrics.prom
 DatabaseURL	internal/config/config.go	/^	DatabaseURL string$/;"	m	struct:config.Config	typeref:typename:string
 Deploy	internal/deploy/git.go	/^func (s *Store) Deploy(serviceName, image string) error {$/;"	f	struct:deploy.Store	typeref:typename:error
 Deploy	internal/deploy/handler.go	/^func (h *Handler) Deploy(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.Handler
+DeployedAt	internal/deploy/rollback_handler.go	/^	DeployedAt time.Time `json:"deployed_at"`$/;"	m	struct:deploy.DeploymentRecord	typeref:typename:time.Time
+DeploymentRecord	internal/deploy/rollback_handler.go	/^type DeploymentRecord struct {$/;"	s	package:deploy
+DeploymentStore	internal/service/deployment_store.go	/^type DeploymentStore struct {$/;"	s	package:service
 ErrDuplicate	internal/service/store.go	/^	ErrDuplicate = errors.New("service already exists")$/;"	v	package:service
 ErrNotFound	internal/service/store.go	/^	ErrNotFound  = errors.New("service not found")$/;"	v	package:service
 GetByName	internal/service/store.go	/^func (s *Store) GetByName(name string) (Service, error) {$/;"	f	struct:service.Store	typeref:typename:(Service, error)
@@ -139,18 +142,24 @@ Handler	internal/health/handler.go	/^func Handler(w http.ResponseWriter, r *http
 Handler	internal/logs/handler.go	/^type Handler struct {$/;"	s	package:logs
 Handler	internal/metrics/handler.go	/^type Handler struct {$/;"	s	package:metrics
 Handler	internal/service/handler.go	/^type Handler struct {$/;"	s	package:service
+HistoryStore	internal/deploy/rollback_handler.go	/^type HistoryStore interface {$/;"	i	package:deploy
+ID	internal/deploy/rollback_handler.go	/^	ID         int       `json:"id"`$/;"	m	struct:deploy.DeploymentRecord	typeref:typename:int
 ID	internal/service/model.go	/^    ID        int       `json:"id"`$/;"	m	struct:service.Service	typeref:typename:int
 Image	internal/deploy/handler.go	/^	Image   string `json:"image"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
 Image	internal/deploy/handler.go	/^	Image string `json:"image"`$/;"	m	struct:deploy.deployRequest	typeref:typename:string
+Image	internal/deploy/rollback_handler.go	/^	Image      string    `json:"image"`$/;"	m	struct:deploy.DeploymentRecord	typeref:typename:string
 Internal Developer Platform	ui/index.html	/^  <title>Internal Developer Platform<\/title>$/;"	j
 Internal Developer Platform (IDP)	README.md	/^# Internal Developer Platform (IDP)$/;"	c
 Known limitations / future work	README.md	/^## Known limitations \/ future work$/;"	s	chapter:Internal Developer Platform (IDP)
 KubeconfigPath	internal/config/config.go	/^	KubeconfigPath  string$/;"	m	struct:config.Config	typeref:typename:string
 Line	internal/logs/loki.go	/^	Line      string `json:"line"`$/;"	m	struct:logs.LogLine	typeref:typename:string
+List	internal/deploy/rollback_handler.go	/^	List(serviceName string) ([]DeploymentRecord, error)$/;"	n	interface:deploy.HistoryStore	typeref:typename:([]DeploymentRecord, error)
+List	internal/service/deployment_store.go	/^func (s *DeploymentStore) List(serviceName string) ([]deploy.DeploymentRecord, error) {$/;"	f	struct:service.DeploymentStore	typeref:typename:([]deploy.DeploymentRecord, error)
 List	internal/service/handler.go	/^	List() ([]Service, error)$/;"	n	interface:service.Storer	typeref:typename:([]Service, error)
 List	internal/service/handler.go	/^func (h *Handler) List(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:service.Handler
 List	internal/service/handler_test.go	/^func (f *fakeStore) List() ([]Service, error) {$/;"	f	struct:service.fakeStore	typeref:typename:([]Service, error)
 List	internal/service/store.go	/^func (s *Store) List() ([]Service, error) {$/;"	f	struct:service.Store	typeref:typename:([]Service, error)
+ListDeployments	internal/deploy/rollback_handler.go	/^func (h *RollbackHandler) ListDeployments(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.RollbackHandler
 Load	internal/config/config.go	/^func Load() (Config, error) {$/;"	f	package:config	typeref:typename:(Config, error)
 LogLine	internal/logs/loki.go	/^type LogLine struct {$/;"	s	package:logs
 LokiURL	internal/config/config.go	/^	LokiURL string$/;"	m	struct:config.Config	typeref:typename:string
@@ -158,10 +167,12 @@ Migrate	internal/db/migrate.go	/^func Migrate(db *sql.DB, migrationsPath string)
 MigrationsPath	internal/config/config.go	/^	MigrationsPath  string$/;"	m	struct:config.Config	typeref:typename:string
 Name	internal/service/model.go	/^    Name      string    `json:"name"`$/;"	m	struct:service.Service	typeref:typename:string
 Name	internal/service/model.go	/^    Name    string `json:"name"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
-NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
+NewDeploymentStore	internal/service/deployment_store.go	/^func NewDeploymentStore(db *sql.DB) *DeploymentStore {$/;"	f	package:service	typeref:typename:*DeploymentStore
+NewHandler	internal/deploy/handler.go	/^func NewHandler(store *Store, recorder Recorder) *Handler {$/;"	f	package:deploy	typeref:typename:*Handler
 NewHandler	internal/logs/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:logs	typeref:typename:*Handler
 NewHandler	internal/metrics/handler.go	/^func NewHandler(store *Store) *Handler {$/;"	f	package:metrics	typeref:typename:*Handler
 NewHandler	internal/service/handler.go	/^func NewHandler(store Storer, bootstrapper Bootstrapper) *Handler {$/;"	f	package:service	typeref:typename:*Handler
+NewRollbackHandler	internal/deploy/rollback_handler.go	/^func NewRollbackHandler(store *Store, history HistoryStore) *RollbackHandler {$/;"	f	package:deploy	typeref:typename:*RollbackHandler
 NewStore	internal/deploy/git.go	/^func NewStore(repoURL, localPath, token, kubeconfigPath string) (*Store, error) {$/;"	f	package:deploy	typeref:typename:(*Store, error)
 NewStore	internal/logs/loki.go	/^func NewStore(lokiURL string) *Store {$/;"	f	package:logs	typeref:typename:*Store
 NewStore	internal/metrics/prometheus.go	/^func NewStore(prometheusURL string) *Store {$/;"	f	package:metrics	typeref:typename:*Store
@@ -169,14 +180,23 @@ NewStore	internal/service/store.go	/^func NewStore(db *sql.DB) *Store {$/;"	f	pa
 Owner	internal/service/model.go	/^    Owner     string    `json:"owner"`$/;"	m	struct:service.Service	typeref:typename:string
 Owner	internal/service/model.go	/^    Owner   string `json:"owner"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
 Prerequisites	README.md	/^### Prerequisites$/;"	S	section:Internal Developer Platform (IDP)""Run locally
+Previous	internal/deploy/rollback_handler.go	/^	Previous(serviceName string) (DeploymentRecord, error)$/;"	n	interface:deploy.HistoryStore	typeref:typename:(DeploymentRecord, error)
+Previous	internal/service/deployment_store.go	/^func (s *DeploymentStore) Previous(serviceName string) (deploy.DeploymentRecord, error) {$/;"	f	struct:service.DeploymentStore	typeref:typename:(deploy.DeploymentRecord, error)
 Project structure	README.md	/^## Project structure$/;"	s	chapter:Internal Developer Platform (IDP)
 PrometheusURL	internal/config/config.go	/^	PrometheusURL string$/;"	m	struct:config.Config	typeref:typename:string
 ReadyReplicas	internal/metrics/prometheus.go	/^	ReadyReplicas string `json:"ready_replicas"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
+Record	internal/deploy/handler.go	/^	Record(serviceName, image string) error$/;"	n	interface:deploy.Recorder	typeref:typename:error
+Record	internal/deploy/rollback_handler.go	/^	Record(serviceName, image string) error$/;"	n	interface:deploy.HistoryStore	typeref:typename:error
+Record	internal/service/deployment_store.go	/^func (s *DeploymentStore) Record(serviceName, image string) error {$/;"	f	struct:service.DeploymentStore	typeref:typename:error
+Recorder	internal/deploy/handler.go	/^type Recorder interface {$/;"	i	package:deploy
 RepoURL	internal/service/model.go	/^    RepoURL   string    `json:"repo_url"`$/;"	m	struct:service.Service	typeref:typename:string
 RepoURL	internal/service/model.go	/^    RepoURL string `json:"repo_url"`$/;"	m	struct:service.CreateRequest	typeref:typename:string
+Rollback	internal/deploy/rollback_handler.go	/^func (h *RollbackHandler) Rollback(w http.ResponseWriter, r *http.Request) {$/;"	f	struct:deploy.RollbackHandler
+RollbackHandler	internal/deploy/rollback_handler.go	/^type RollbackHandler struct {$/;"	s	package:deploy
 Run locally	README.md	/^## Run locally$/;"	s	chapter:Internal Developer Platform (IDP)
 ServerAddr	internal/config/config.go	/^	ServerAddr string$/;"	m	struct:config.Config	typeref:typename:string
 Service	internal/deploy/handler.go	/^	Service string `json:"service"`$/;"	m	struct:deploy.deployResponse	typeref:typename:string
+Service	internal/deploy/rollback_handler.go	/^	Service    string    `json:"service"`$/;"	m	struct:deploy.DeploymentRecord	typeref:typename:string
 Service	internal/metrics/prometheus.go	/^	Service       string `json:"service"`$/;"	m	struct:metrics.ServiceMetrics	typeref:typename:string
 Service	internal/service/model.go	/^type Service struct {$/;"	s	package:service
 ServiceMetrics	internal/metrics/prometheus.go	/^type ServiceMetrics struct {$/;"	s	package:metrics
@@ -214,16 +234,25 @@ createHelmChart	internal/deploy/git.go	/^func (s *Store) createHelmChart(service
 created_at	migrations/000001_create_services.up.sql	/^    created_at TIMESTAMP NOT NULL DEFAULT NOW()$/;"	E	table:services
 db	internal/db/db.go	/^package db$/;"	p
 db	internal/db/migrate.go	/^package db$/;"	p
+db	internal/service/deployment_store.go	/^	db *sql.DB$/;"	m	struct:service.DeploymentStore	typeref:typename:*sql.DB
 db	internal/service/store.go	/^    db *sql.DB$/;"	m	struct:service.Store	typeref:typename:*sql.DB
 deploy	internal/deploy/git.go	/^package deploy$/;"	p
 deploy	internal/deploy/handler.go	/^package deploy$/;"	p
+deploy	internal/deploy/rollback_handler.go	/^package deploy$/;"	p
 deployRequest	internal/deploy/handler.go	/^type deployRequest struct {$/;"	s	package:deploy
 deployResponse	internal/deploy/handler.go	/^type deployResponse struct {$/;"	s	package:deploy
+deployed_at	migrations/000002_create_deployments.up.sql	/^    deployed_at TIMESTAMP NOT NULL DEFAULT NOW()$/;"	E	table:deployments
+deployments	migrations/000002_create_deployments.up.sql	/^CREATE TABLE IF NOT EXISTS deployments ($/;"	t
 fakeStore	internal/service/handler_test.go	/^type fakeStore struct {$/;"	s	package:service
 few commands	README.md	/^# few commands$/;"	c
 health	internal/health/handler.go	/^package health$/;"	p
+history	internal/deploy/rollback_handler.go	/^	history HistoryStore$/;"	m	struct:deploy.RollbackHandler	typeref:typename:HistoryStore
 id	migrations/000001_create_services.up.sql	/^    id         SERIAL PRIMARY KEY,$/;"	E	table:services
+id	migrations/000002_create_deployments.up.sql	/^    id          SERIAL PRIMARY KEY,$/;"	E	table:deployments
 idplogs	cmd/server/main.go	/^	idplogs "github.com\/generalsanjeet\/idp\/internal\/logs"$/;"	P	package:github.com/generalsanjeet/idp/internal/logs
+idx_deployments_deployed_at	migrations/000002_create_deployments.up.sql	/^CREATE INDEX idx_deployments_deployed_at ON deployments(deployed_at DESC);$/;"	i	table:deployments
+idx_deployments_service	migrations/000002_create_deployments.up.sql	/^CREATE INDEX idx_deployments_service ON deployments(service);$/;"	i	table:deployments
+image	migrations/000002_create_deployments.up.sql	/^    image       TEXT NOT NULL,$/;"	E	table:deployments
 k8sClient	internal/deploy/git.go	/^	k8sClient  dynamic.Interface \/\/ dynamic client for applying ArgoCD CRDs$/;"	m	struct:deploy.Store	typeref:typename:dynamic.Interface
 kyaml	internal/deploy/git.go	/^	kyaml "sigs.k8s.io\/yaml"$/;"	P	package:sigs.k8s.io/yaml
 listFn	internal/service/handler_test.go	/^	listFn   func() ([]Service, error)$/;"	m	struct:service.fakeStore	typeref:typename:func() ([]Service, error)
@@ -244,18 +273,22 @@ parseImage	internal/deploy/git.go	/^func parseImage(image string) (repository, t
 port-forwards	Makefile	/^port-forwards:$/;"	t
 prometheusResponse	internal/metrics/prometheus.go	/^type prometheusResponse struct {$/;"	s	package:metrics
 prometheusURL	internal/metrics/prometheus.go	/^	prometheusURL string \/\/ e.g. http:\/\/localhost:9091$/;"	m	struct:metrics.Store	typeref:typename:string
+recorder	internal/deploy/handler.go	/^	recorder Recorder$/;"	m	struct:deploy.Handler	typeref:typename:Recorder
 repoURL	internal/deploy/git.go	/^	repoURL   string \/\/ remote GitHub repo URL$/;"	m	struct:deploy.Store	typeref:typename:string
 repo_url	migrations/000001_create_services.up.sql	/^    repo_url   TEXT NOT NULL,$/;"	E	table:services
 response	internal/health/handler.go	/^type response struct {$/;"	s	package:health
 root	ui/index.html	/^  <div id="root"><\/div>$/;"	I
 run	Makefile	/^run:$/;"	t
+service	internal/service/deployment_store.go	/^package service$/;"	p
 service	internal/service/handler.go	/^package service$/;"	p
 service	internal/service/handler_test.go	/^package service$/;"	p
 service	internal/service/model.go	/^package service$/;"	p
 service	internal/service/store.go	/^package service$/;"	p
 service	internal/service/store_test.go	/^package service$/;"	p
+service	migrations/000002_create_deployments.up.sql	/^    service     TEXT NOT NULL,$/;"	E	table:deployments
 services	migrations/000001_create_services.up.sql	/^CREATE TABLE IF NOT EXISTS services ($/;"	t
 store	internal/deploy/handler.go	/^	store *Store$/;"	m	struct:deploy.Handler	typeref:typename:*Store
+store	internal/deploy/rollback_handler.go	/^	store    *Store$/;"	m	struct:deploy.RollbackHandler	typeref:typename:*Store
 store	internal/logs/handler.go	/^	store *Store$/;"	m	struct:logs.Handler	typeref:typename:*Store
 store	internal/metrics/handler.go	/^	store *Store$/;"	m	struct:metrics.Handler	typeref:typename:*Store
 store	internal/service/handler.go	/^	store       Storer$/;"	m	struct:service.Handler	typeref:typename:Storer
